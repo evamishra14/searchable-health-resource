@@ -96,7 +96,8 @@ async function loadResources() {
 
     return combined.length ? combined : getFallbackData();
   } catch (e) {
-    return getFallbackData();
+    
+    return combined.length ? combined : [];
   }
 }
 
@@ -119,7 +120,263 @@ function getFallbackData() {
   ];
 }
 
-let resources = [];
+let resources = 
+[
+  {
+    name_en: "Lake County Health Department - Behavioral Health Services",
+    name_es: "Departamento de Salud del Condado de Lake - Servicios de Salud Mental",
+    name_pl: "Wydział Zdrowia Hrabstwa Lake - Usługi Zdrowia Psychicznego",
+    category: "mental",
+    cost: "low",
+    lat: 42.3636,
+    lng: -87.8337,
+    last_verified: "2026-04-01",
+    description_en: "Mental health treatment, counseling, crisis care, and therapy services.",
+    description_es: "Tratamiento de salud mental, consejería y servicios de crisis.",
+    description_pl: "Usługi zdrowia psychicznego, terapia i opieka kryzysowa.",
+    contact: "847-377-8180"
+  },
+  {
+    name_en: "Independence Center (Waukegan)",
+    name_es: "Centro de Independencia (Waukegan)",
+    name_pl: "Centrum Niezależności (Waukegan)",
+    category: "mental",
+    cost: "free",
+    lat: 42.3630,
+    lng: -87.8445,
+    last_verified: "2026-04-01",
+    description_en: "Community-based mental health recovery and support services.",
+    description_es: "Servicios comunitarios de recuperación de salud mental.",
+    description_pl: "Wsparcie i rehabilitacja zdrowia psychicznego.",
+    contact: "847-360-1020"
+  },
+  {
+    name_en: "Allendale Association (Lake Villa)",
+    name_es: "Asociación Allendale (Lake Villa)",
+    name_pl: "Stowarzyszenie Allendale (Lake Villa)",
+    category: "mental",
+    cost: "low",
+    lat: 42.4153,
+    lng: -88.0684,
+    last_verified: "2026-04-01",
+    description_en: "Mental health services for children, adolescents, and families.",
+    description_es: "Servicios de salud mental para niños y familias.",
+    description_pl: "Usługi zdrowia psychicznego dla dzieci i rodzin.",
+    contact: "847-356-3322"
+  },
+  {
+    name_en: "COOL Ministries Food Pantry (Waukegan)",
+    name_es: "Despensa de Alimentos COOL Ministries (Waukegan)",
+    name_pl: "Bank Żywności COOL Ministries (Waukegan)",
+    category: "food",
+    cost: "free",
+    lat: 42.3695,
+    lng: -87.8526,
+    last_verified: "2026-04-01",
+    description_en: "Monthly food distribution for individuals and families in need.",
+    description_es: "Distribución mensual de alimentos para familias necesitadas.",
+    description_pl: "Miesięczna pomoc żywnościowa dla rodzin.",
+    contact: "847-662-1230"
+  },
+  {
+    name_en: "Hope Food Pantry (Libertyville)",
+    name_es: "Despensa Hope (Libertyville)",
+    name_pl: "Bank Żywności Hope (Libertyville)",
+    category: "food",
+    cost: "free",
+    lat: 42.2831,
+    lng: -87.9531,
+    last_verified: "2026-04-01",
+    description_en: "Free groceries for residents facing food insecurity.",
+    description_es: "Alimentos gratuitos para residentes necesitados.",
+    description_pl: "Darmowa żywność dla potrzebujących.",
+    contact: "847-362-2110"
+  },
+  {
+    name_en: "Lake County Crisis Care Program",
+    name_es: "Programa de Crisis del Condado de Lake",
+    name_pl: "Program Kryzysowy Hrabstwa Lake",
+    category: "mental",
+    cost: "free",
+    lat: 42.3636,
+    lng: -87.8337,
+    last_verified: "2026-04-01",
+    description_en: "24/7 crisis intervention and mental health emergency support.",
+    description_es: "Apoyo de emergencia en salud mental las 24 horas.",
+    description_pl: "Całodobowa pomoc kryzysowa zdrowia psychicznego.",
+    contact: "847-377-8088"
+  },
+  {
+    name_en: "Lake County Health Department (Zion Clinic)",
+    name_es: "Departamento de Salud del Condado de Lake (Clínica Zion)",
+    name_pl: "Klinika Zdrowia (Zion)",
+    category: "clinic",
+    cost: "low",
+    lat: 42.4461,
+    lng: -87.8329,
+    last_verified: "2026-04-01",
+    description_en: "Primary care, immunizations, and preventive health services.",
+    description_es: "Atención primaria, vacunas y servicios preventivos.",
+    description_pl: "Podstawowa opieka zdrowotna i szczepienia.",
+    contact: "847-746-0701"
+  },
+  {
+    name_en: "Lake County Health Department (Grayslake Clinic)",
+    name_es: "Departamento de Salud del Condado de Lake (Clínica Grayslake)",
+    name_pl: "Klinika Zdrowia (Grayslake)",
+    category: "clinic",
+    cost: "low",
+    lat: 42.3445,
+    lng: -88.0417,
+    last_verified: "2026-04-01",
+    description_en: "Community health services including immunizations and screenings.",
+    description_es: "Servicios comunitarios de salud e inmunización.",
+    description_pl: "Usługi zdrowotne i szczepienia.",
+    contact: "847-377-8297"
+  },
+  {
+    name_en: "Lake County Health Department – Dental Services",
+    name_es: "Departamento de Salud – Servicios Dentales",
+    name_pl: "Usługi Dentystyczne Hrabstwa Lake",
+    category: "dental",
+    cost: "low",
+    lat: 42.3445,
+    lng: -88.0417,
+    last_verified: "2026-04-01",
+    description_en: "Affordable dental exams, cleanings, and preventive care.",
+    description_es: "Servicios dentales asequibles y preventivos.",
+    description_pl: "Tania opieka stomatologiczna i profilaktyczna.",
+    contact: "847-377-8000"
+  },
+  {
+    name_en: "Howard Brown Health (North Chicago)",
+    name_es: "Howard Brown Salud",
+    name_pl: "Howard Brown Zdrowie",
+    category: "clinic",
+    cost: "low",
+    lat: 42.3256,
+    lng: -87.8412,
+    last_verified: "2026-04-01",
+    description_en: "Primary care, dental, and LGBTQ+ inclusive health services.",
+    description_es: "Atención primaria y dental inclusiva.",
+    description_pl: "Opieka zdrowotna i stomatologiczna.",
+    contact: "773-388-1600"
+  },
+  {
+    name_en: "PADS Lake County (Shelter Services)",
+    name_es: "Refugio PADS del Condado de Lake",
+    name_pl: "Schronisko PADS Hrabstwa Lake",
+    category: "senior",
+    cost: "free",
+    lat: 42.3703,
+    lng: -87.9020,
+    last_verified: "2026-04-01",
+    description_en: "Emergency shelter and housing services for homeless individuals.",
+    description_es: "Refugio de emergencia para personas sin hogar.",
+    description_pl: "Schronienie dla osób bezdomnych.",
+    contact: "847-689-4357"
+  },
+  {
+    name_en: "Catholic Charities Lake County",
+    name_es: "Caridades Católicas del Condado de Lake",
+    name_pl: "Katolickie Organizacje Charytatywne",
+    category: "senior",
+    cost: "free",
+    lat: 42.3636,
+    lng: -87.8337,
+    last_verified: "2026-04-01",
+    description_en: "Senior support, counseling, and emergency assistance.",
+    description_es: "Apoyo para personas mayores y asistencia.",
+    description_pl: "Wsparcie dla seniorów i pomoc kryzysowa.",
+    contact: "847-782-4000"
+  },
+  {
+    name_en: "Waukegan Township Senior Center",
+    name_es: "Centro de Personas Mayores de Waukegan",
+    name_pl: "Centrum Seniora Waukegan",
+    category: "senior",
+    cost: "free",
+    lat: 42.3633,
+    lng: -87.8448,
+    last_verified: "2026-04-01",
+    description_en: "Meals, transportation, and wellness programs for seniors.",
+    description_es: "Comidas y programas para mayores.",
+    description_pl: "Posiłki i programy dla seniorów.",
+    contact: "847-244-9242"
+  },
+  {
+    name_en: "Moraine Township Food Pantry",
+    name_es: "Despensa de Alimentos Moraine",
+    name_pl: "Bank Żywności Moraine",
+    category: "food",
+    cost: "free",
+    lat: 42.2831,
+    lng: -87.9531,
+    last_verified: "2026-04-01",
+    description_en: "Emergency food support for residents in need.",
+    description_es: "Apoyo alimentario de emergencia.",
+    description_pl: "Pomoc żywnościowa dla potrzebujących.",
+    contact: "847-432-3240"
+  },
+  {
+    name_en: "Zion Benton Public Library – Community Services",
+    name_es: "Biblioteca Pública Zion Benton",
+    name_pl: "Biblioteka Publiczna Zion Benton",
+    category: "senior",
+    cost: "free",
+    lat: 42.4461,
+    lng: -87.8329,
+    last_verified: "2026-04-01",
+    description_en: "Community programs, internet access, and support services.",
+    description_es: "Programas comunitarios y acceso a internet.",
+    description_pl: "Programy społeczne i dostęp do internetu.",
+    contact: "847-746-1700"
+  },
+  {
+    name_en: "Highland Park Senior Center",
+    name_es: "Centro de Mayores Highland Park",
+    name_pl: "Centrum Seniora Highland Park",
+    category: "senior",
+    cost: "free",
+    lat: 42.1817,
+    lng: -87.8003,
+    last_verified: "2026-04-01",
+    description_en: "Health screenings, fitness, and social programs for seniors.",
+    description_es: "Programas de salud para mayores.",
+    description_pl: "Programy zdrowotne dla seniorów.",
+    contact: "847-432-4110"
+  },
+  {
+    name_en: "Lake County Haven (Domestic Violence Shelter)",
+    name_es: "Refugio Haven",
+    name_pl: "Schronisko Haven",
+    category: "senior",
+    cost: "free",
+    lat: 42.4167,
+    lng: -87.8445,
+    last_verified: "2026-04-01",
+    description_en: "Safe shelter and support for domestic violence survivors.",
+    description_es: "Refugio seguro para víctimas.",
+    description_pl: "Bezpieczne schronienie dla ofiar przemocy.",
+    contact: "847-249-4450"
+  },
+  {
+    name_en: "North Chicago Community Partners",
+    name_es: "Socios Comunitarios de North Chicago",
+    name_pl: "Partnerzy Społeczności North Chicago",
+    category: "clinic",
+    cost: "free",
+    lat: 42.3256,
+    lng: -87.8412,
+    last_verified: "2026-04-01",
+    description_en: "Education, wellness, and youth programs.",
+    description_es: "Programas educativos y de salud.",
+    description_pl: "Programy edukacyjne i zdrowotne.",
+    contact: "847-785-2235"
+  }
+
+];
+
 
 function renderResources(list) {
   const container = document.getElementById("resourceList");
@@ -181,7 +438,11 @@ function submitForm(e) {
 }
 
 (async function init() {
-  resources = await loadResources();
+  const apiData = await loadResources();
+
+  // 🔥 Merge API data + your hardcoded data instead of overwriting
+  resources = [...resources, ...apiData];
+
   renderResources(resources);
 })();
 </script>
