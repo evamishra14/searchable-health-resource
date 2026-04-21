@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lake County Health Resources</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f9; }
+    header { background: #2c7be5; color: white; padding: 15px; text-align: center; }
+    .container { padding: 20px; max-width: 1000px; margin: auto; }
+    .controls { margin-bottom: 15px; display: flex; flex-wrap: wrap; gap: 10px; }
+    select, input { padding: 8px; }
+    .card { background: white; padding: 15px; margin-bottom: 12px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .title { font-weight: bold; font-size: 18px; }
+    .category { color: #2c7be5; font-weight: bold; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 12px; margin-right: 6px; }
+    .free { background: #d4edda; }
+    .low { background: #fff3cd; }
+    iframe { width: 100%; height: 200px; border: 0; margin-top: 10px; border-radius: 8px; }
+    .form-section { background: white; padding: 20px; border-radius: 10px; margin-top: 30px; }
+    button { padding: 8px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 id="title">Lake County Health Resources</h1>
+  <button onclick="setLanguage('en')">English</button>
+  <button onclick="setLanguage('es')">Español</button>
+  <button onclick="setLanguage('pl')">Polski</button>
+</header>
+
+<div class="container">
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search..." onkeyup="filterResources()" />
+    <select id="categoryFilter" onchange="filterResources()">
+      <option value="all">All Categories</option>
+      <option value="clinic">Clinics</option>
+      <option value="mental">Mental Health</option>
+      <option value="food">Food Assistance</option>
+      <option value="dental">Dental Care</option>
+      <option value="immunization">Immunizations</option>
+      <option value="senior">Senior Services</option>
+    </select>
+    <select id="costFilter" onchange="filterResources()">
+      <option value="all">Free & Low-cost</option>
+      <option value="free">Free Only</option>
+      <option value="low">Low-cost Only</option>
+    </select>
+  </div>
+
+  <div id="resourceList"></div>
+</div>
+
+<script>
+let language = "en";
+
+// Real data integration (multi-source)
+async function loadResources() {
+  try {
+    // Example APIs (replace with real endpoints)
+    const sources = [
+      'https://data.lakecountyil.gov/resource/health.json',
+      'https://api.open-data.org/health-resources',
+      'https://nonprofits.org/api/resources'
+    ];
+
+    let combined = [];
+
+    for (let url of sources) {
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        // Normalize data format
+        const normalized = data.map(item => ({
+          name_en: item.name || 'Unknown',
+          name_es: item.name_es || item.name || 'Desconocido',
+          name_pl: item.name_pl || item.name || 'Nieznany',
+          category: item.category || 'clinic',
+          cost: item.cost || 'low',
+          lat: item.lat || 42.18,
+          lng: item.lng || -87.95,
+          last_verified: item.last_verified || '2026-01-01',
+          description_en: item.description || '',
+          description_es: item.description_es || item.description || '',
+          description_pl: item.description_pl || item.description || '',
+          contact: item.phone || 'N/A'
+        }));
+
+        combined = combined.concat(normalized);
+      } catch (e) {
+        console.warn('Source failed:', url);
+      }
+    }
+
+    return combined.length ? combined : getFallbackData();
+  } catch (e) {
+    return getFallbackData();
+  }
+}
+
+function getFallbackData() {
+  return [
+    {
+      name_en: "Community Health Clinic",
+      name_es: "Clínica de Salud Comunitaria",
+      name_pl: "Klinika Zdrowia",
+      category: "clinic",
+      cost: "free",
+      lat: 42.18,
+      lng: -87.95,
+      last_verified: "2026-03-01",
+      description_en: "Free primary care services.",
+      description_es: "Servicios gratuitos de atención primaria.",
+      description_pl: "Darmowa podstawowa opieka zdrowotna.",
+      contact: "(847) 123-4567"
+    }
+  ];
+}
+
+let resources = [];
+
+function renderResources(list) {
+  const container = document.getElementById("resourceList");
+  container.innerHTML = "";
+
+  list.forEach(res => {
+    const mapUrl = `https://maps.google.com/maps?q=${res.lat},${res.lng}&z=15&output=embed`;
+
+    const name = language === 'es' ? res.name_es : language === 'pl' ? res.name_pl : res.name_en;
+    const desc = language === 'es' ? res.description_es : language === 'pl' ? res.description_pl : res.description_en;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="title">${name}</div>
+      <div class="category">${res.category}</div>
+      <span class="tag ${res.cost === 'free' ? 'free' : 'low'}">${res.cost}</span>
+      <p>${desc}</p>
+      <p><strong>Contact:</strong> ${res.contact}</p>
+      <p><strong>Last Verified:</strong> ${res.last_verified}</p>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${res.lat},${res.lng}" target="_blank">Get Directions</a>
+      <iframe src="${mapUrl}"></iframe>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function filterResources() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const category = document.getElementById("categoryFilter").value;
+  const cost = document.getElementById("costFilter").value;
+
+  const filtered = resources.filter(res => {
+    const name = (language === 'es' ? res.name_es : language === 'pl' ? res.name_pl : res.name_en).toLowerCase();
+    return (
+      name.includes(search) &&
+      (category === "all" || res.category === category) &&
+      (cost === "all" || res.cost === cost)
+    );
+  });
+
+  renderResources(filtered);
+}
+
+function setLanguage(lang) {
+  language = lang;
+  document.getElementById("title").innerText =
+    lang === 'es' ? "Recursos de Salud del Condado de Lake" :
+    lang === 'pl' ? "Zasoby Zdrowia Hrabstwa Lake" :
+    "Lake County Health Resources";
+  filterResources();
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById("formMessage").innerText = "Thank you for volunteering!";
+}
+
+(async function init() {
+  resources = await loadResources();
+  renderResources(resources);
+})();
+</script>
+
+</body>
+</html>
