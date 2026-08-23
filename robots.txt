@@ -1,0 +1,7 @@
+# robots.txt for lakecountyhealthresources.org
+# Built by a student at Adlai E. Stevenson High School, Buffalo Grove IL
+
+User-agent: *
+Allow: /
+
+Sitemap: https://lakecountyhealthresources.org/sitemap.xml
