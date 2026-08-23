@@ -3,8 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Health Resources Lake County IL | Clinics, Food, Mental Health</title>
-<meta name="description" content="A free, bilingual directory of health resources in Lake County, Illinois — clinics, mental health, food, dental, immunizations, and senior care.">
+<!-- ── SEO: PRIMARY META TAGS ───────────────────────────────── -->
+<title>Free Health Resources Lake County IL | Clinics, Food, Mental Health, Dental</title>
+<meta name="description" content="Free and low-cost health resources in Lake County, Illinois. Find free clinics, mental health services, food pantries, dental care, immunizations, and senior care — bilingual English, Spanish, and Polish.">
+<meta name="keywords" content="free clinic Lake County IL, free health resources Waukegan, low cost dental Lake County, food pantry Lake County Illinois, mental health services Lake County, immunizations Lake County, senior care Lake County, free medical care Illinois, Lake County Health Department, health resources Buffalo Grove, health resources Libertyville, health resources Waukegan, health resources Zion Illinois">
+<meta name="author" content="Adlai E. Stevenson High School Student — Buffalo Grove, IL">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://lakecountyhealthresources.org/">
+
+<!-- ── SEO: OPEN GRAPH (Facebook, LinkedIn previews) ─────────── -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lakecountyhealthresources.org/">
+<meta property="og:title" content="Free Health Resources Lake County IL | Clinics, Food, Mental Health">
+<meta property="og:description" content="A free, bilingual directory of 30+ verified health resources in Lake County, Illinois — free clinics, food pantries, mental health, dental care, immunizations, and senior services.">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_MX">
+<meta property="og:site_name" content="Lake County Health Resources">
+
+<!-- ── SEO: TWITTER / X CARD ─────────────────────────────────── -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Health Resources Lake County IL">
+<meta name="twitter:description" content="Find free clinics, food pantries, mental health services, dental care, and more in Lake County, Illinois. Bilingual English & Spanish. Verified April 2026.">
+
+<!-- ── SEO: GEO TAGS (local search signals) ──────────────────── -->
+<meta name="geo.region" content="US-IL">
+<meta name="geo.placename" content="Lake County, Illinois">
+<meta name="geo.position" content="42.3636;-87.8337">
+<meta name="ICBM" content="42.3636, -87.8337">
+
+<!-- ── SITEMAP REFERENCE ──────────────────────────────────────── -->
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -149,6 +177,17 @@ footer a{color:#5BC4F5;text-decoration:none}
   .main{padding:18px 16px 48px}
 }
 </style>
+<!-- ── JSON-LD STRUCTURED DATA — generated dynamically from resources array ── -->
+<!-- Schema types used:
+     WebSite          → site-level identity + sitelinks searchbox
+     BreadcrumbList   → navigation path for Google
+     MedicalClinic    → free/low-cost clinics
+     MedicalOrganization → mental health & dental providers
+     FoodEstablishment / LocalBusiness → food assistance
+     GovernmentOffice → immunization clinics
+     SeniorCenter     → senior care services
+-->
+<script id="json-ld-schemas" type="application/ld+json"></script>
 </head>
 <body>
 
@@ -596,6 +635,188 @@ function setLang(lang, btn) {
 
 /* ── INIT ─────────────────────────────────────────────────────── */
 buildCards();
+buildSchemas();
+
+/* ── JSON-LD SCHEMA BUILDER ───────────────────────────────────── */
+function buildSchemas() {
+
+  /* Map our category keys → Schema.org @type */
+  const schemaType = {
+    clinic: 'MedicalClinic',
+    mental: 'MedicalOrganization',
+    food:   'LocalBusiness',
+    dental: 'Dentist',
+    immun:  'GovernmentOffice',
+    senior: 'LocalBusiness'
+  };
+
+  /* Map our category keys → Schema.org medicalSpecialty where applicable */
+  const specialty = {
+    clinic: 'GeneralPractice',
+    mental: 'MentalHealth',
+    dental: 'Dentistry',
+    immun:  'Geriatric'
+  };
+
+  /* Map our cost values → priceRange indicator */
+  const priceRange = { free: '$', low: '$-$$' };
+
+  /* ── 1. WebSite schema — enables Sitelinks Searchbox in Google ── */
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://lakecountyhealthresources.org/#website',
+    name: 'Lake County Health Resources',
+    alternateName: 'Lake County Health Guide',
+    url: 'https://lakecountyhealthresources.org/',
+    description: 'A free, bilingual directory of 30+ verified free and low-cost health resources in Lake County, Illinois.',
+    inLanguage: ['en', 'es', 'pl'],
+    author: {
+      '@type': 'Person',
+      name: 'Student at Adlai E. Stevenson High School',
+      affiliation: {
+        '@type': 'EducationalOrganization',
+        name: 'Adlai E. Stevenson High School',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Buffalo Grove',
+          addressRegion: 'IL',
+          addressCountry: 'US'
+        }
+      }
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://lakecountyhealthresources.org/?q={search_term_string}'
+      },
+      'query-input': 'required name=search_term_string'
+    }
+  };
+
+  /* ── 2. BreadcrumbList schema ── */
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://lakecountyhealthresources.org/'
+      }
+    ]
+  };
+
+  /* ── 3. ItemList schema — the full directory as a list ── */
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Lake County Health Resources Directory',
+    description: 'Verified free and low-cost health resources in Lake County, Illinois',
+    numberOfItems: resources.length,
+    itemListElement: resources.map((r, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': schemaType[r.category] || 'LocalBusiness',
+        name: r.name_en,
+        description: r.desc_en,
+        ...(specialty[r.category] ? { medicalSpecialty: specialty[r.category] } : {}),
+        priceRange: priceRange[r.cost] || '$',
+        telephone: r.contact,
+        openingHours: r.hours || undefined,
+        address: r.address ? {
+          '@type': 'PostalAddress',
+          streetAddress: r.address.split(',')[0]?.trim() || '',
+          addressLocality: (() => {
+            const parts = r.address.split(',');
+            return parts[1]?.trim() || 'Lake County';
+          })(),
+          addressRegion: 'IL',
+          addressCountry: 'US'
+        } : {
+          '@type': 'PostalAddress',
+          addressLocality: 'Lake County',
+          addressRegion: 'IL',
+          addressCountry: 'US'
+        },
+        areaServed: {
+          '@type': 'AdministrativeArea',
+          name: 'Lake County, Illinois'
+        },
+        ...(r.url ? { url: r.url } : {}),
+        availableLanguage: r.langs.map(l => ({
+          '@type': 'Language',
+          name: l
+        })),
+        isAccessibleForFree: r.cost === 'free',
+        ...(r.cost === 'free' ? { offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } } : {})
+      }
+    }))
+  };
+
+  /* ── 4. FAQPage schema — answers common local health questions ── */
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'Where can I find a free clinic in Lake County Illinois?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: "Lake County has several free and low-cost clinics including Aunt Martha's Health & Wellness in Waukegan (sliding fee scale, (847) 775-2900), the Lake County Health Department Waukegan Clinic (3010 Grand Ave, (847) 377-8000), and Howard Brown Health in North Chicago. All serve uninsured patients."
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Where can I find free food assistance in Lake County Illinois?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The Northern Illinois Food Bank operates 30+ free food pantries across Lake County. COOL Ministries Food Pantry in Waukegan ((847) 662-1230) and Hope Food Pantry in Libertyville ((847) 362-2110) also provide free groceries. Most locations require no documentation.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Where can I get free mental health services in Lake County?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The Lake County Health Department Behavioral Health division offers outpatient counseling on a sliding fee scale at (847) 377-8088. A 24/7 free crisis line is available at (800) 345-9049. NAMI Lake County offers free peer support groups at (847) 623-2735.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Where can I get free or low cost dental care in Lake County Illinois?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: "The Lake County Health Department offers affordable dental exams and cleanings at (847) 377-8000. Aunt Martha's Dental Clinic provides sliding-scale dental care at (847) 775-2900. Illinois Donated Dental Services (IDDS) offers free comprehensive dental to eligible disabled or low-income adults at (312) 836-7300."
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Where can I get free immunizations and vaccines in Lake County?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The Lake County Health Department offers free and low-cost immunizations at clinics in Waukegan ((847) 377-8000) and Grayslake ((847) 377-8297). The Vaccines for Children (VFC) program provides free vaccines for eligible children. WIC participants also receive free immunization referrals.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What senior services are available for free in Lake County Illinois?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The Waukegan Township Senior Center ((847) 244-9242) offers free meals, transportation, and wellness programs for seniors. CJE SeniorLife ((847) 597-4500) provides Meals on Wheels and caregiver support. Catholic Charities Lake County ((847) 782-4000) offers free senior counseling and emergency assistance.'
+        }
+      }
+    ]
+  };
+
+  /* ── Inject all schemas as a JSON array into the <script> tag ── */
+  const schemas = [websiteSchema, breadcrumbSchema, itemListSchema, faqSchema];
+  document.getElementById('json-ld-schemas').textContent = JSON.stringify(schemas, null, 2);
+}
 </script>
 </body>
 </html>
