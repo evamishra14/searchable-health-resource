@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About This Project | Lake County Health Resources</title>
+<meta name="description" content="Lake County Health Resources was built by a sophomore at Adlai E. Stevenson High School in Buffalo Grove, IL — a free, bilingual directory of health services for Lake County families.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://lakecountyhealthresources.org/about.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lakecountyhealthresources.org/about.html">
+<meta property="og:title" content="About This Project | Lake County Health Resources">
+<meta property="og:description" content="A free, student-built health resource directory for Lake County, IL. Built by a Stevenson High School sophomore to help families find free and low-cost care.">
+<meta property="og:site_name" content="Lake County Health Resources">
+
+<!-- JSON-LD: About page identity -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Lake County Health Resources",
+  "url": "https://lakecountyhealthresources.org/about.html",
+  "description": "Lake County Health Resources is a free, trilingual health resource directory built by a student at Adlai E. Stevenson High School in Buffalo Grove, Illinois.",
+  "author": {
+    "@type": "Person",
+    "affiliation": {
+      "@type": "EducationalOrganization",
+      "name": "Adlai E. Stevenson High School",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Buffalo Grove",
+        "addressRegion": "IL",
+        "addressCountry": "US"
+      }
+    }
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Lake County Health Resources",
+    "url": "https://lakecountyhealthresources.org/"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --teal:    #003A5C;
+  --teal-lt: #E3EEF7;
+  --teal-md: #0082CA;
+  --slate:   #002A45;
+  --slate2:  #00416B;
+  --muted:   #4A6070;
+  --border:  #C8DCF0;
+  --bg:      #F0F6FB;
+  --gold:    #C8972B;
+  --gold-lt: #FEF6E3;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--slate);line-height:1.7;font-size:15px}
+
+/* ── HEADER (matches index.html exactly) ── */
+header{background:var(--slate);padding:0 24px;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--teal-md)}
+.hdr{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:32px;height:32px;background:var(--teal-md);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px;fill:white}
+.logo-text{font-family:'DM Serif Display',serif;font-size:17px;color:white}
+.logo-text span{color:#5BC4F5}
+.nav-link{font-size:13px;font-weight:500;color:#7AAFD4;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .15s}
+.nav-link:hover{color:white;background:var(--slate2)}
+.nav-link.active{color:white}
+
+/* ── HERO ── */
+.hero{background:var(--slate);padding:52px 24px 48px;text-align:center}
+.hero-inner{max-width:640px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#5BC4F5;background:rgba(0,130,202,.15);border:1px solid rgba(0,130,202,.3);padding:4px 14px;border-radius:99px;margin-bottom:18px}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,5vw,40px);line-height:1.15;color:white;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:#5BC4F5}
+.hero-sub{font-size:15px;color:#A8C8E0;line-height:1.65}
+
+/* ── MAIN CONTENT ── */
+.main{max-width:760px;margin:0 auto;padding:56px 24px 80px}
+
+/* ── STORY SECTION ── */
+.story{margin-bottom:48px}
+.story p{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:18px}
+.story p:first-of-type{font-size:17px;color:var(--slate);font-weight:400}
+.story p strong{color:var(--slate);font-weight:600}
+blockquote{border-left:3px solid var(--teal-md);padding:14px 20px;margin:28px 0;background:var(--teal-lt);border-radius:0 10px 10px 0}
+blockquote p{font-family:'DM Serif Display',serif;font-size:19px;font-style:italic;color:var(--slate);line-height:1.5;margin:0}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:40px 0}
+.stat-box{background:white;border:1.5px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:border-color .15s}
+.stat-box:hover{border-color:var(--teal-md)}
+.stat-num{font-family:'DM Serif Display',serif;font-size:32px;color:var(--teal-md);line-height:1;margin-bottom:6px}
+.stat-label{font-size:12px;color:var(--muted);line-height:1.4}
+
+/* ── SECTION HEADERS ── */
+.section-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--teal-md);margin-bottom:10px}
+.section-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--slate);margin-bottom:16px;line-height:1.2}
+.section-divider{border:none;border-top:1.5px solid var(--border);margin:48px 0}
+
+/* ── HOW IT WORKS ── */
+.steps{display:flex;flex-direction:column;gap:20px;margin-top:8px}
+.step{display:flex;gap:16px;align-items:flex-start}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--teal-md);color:white;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body h4{font-size:15px;font-weight:600;color:var(--slate);margin-bottom:4px}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+
+/* ── SUGGEST SECTION ── */
+.suggest-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px;margin-top:8px}
+.suggest-card h3{font-family:'DM Serif Display',serif;font-size:22px;color:var(--slate);margin-bottom:10px}
+.suggest-card p{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px}
+.suggest-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.field-label{font-size:12px;font-weight:600;color:var(--slate);margin-bottom:5px;display:block}
+.field-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--slate);outline:none;transition:border-color .15s;background:var(--bg)}
+.field-input:focus{border-color:var(--teal-md)}
+textarea.field-input{resize:vertical;min-height:90px}
+.submit-btn{padding:12px 24px;background:var(--teal-md);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;width:100%}
+.submit-btn:hover{background:var(--teal)}
+.form-note{font-size:12px;color:var(--muted);margin-top:10px;text-align:center}
+
+/* ── CONTACT ── */
+.contact-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.contact-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1.5px solid var(--border);border-radius:10px;background:white;font-size:13px;color:var(--muted);text-decoration:none;transition:all .15s}
+.contact-chip:hover{border-color:var(--teal-md);color:var(--slate)}
+.contact-chip svg{width:15px;height:15px;flex-shrink:0;opacity:.7}
+
+/* ── VERIFICATION BADGE ── */
+.verify-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gold-lt);border:1.5px solid var(--gold);border-radius:10px;padding:10px 16px;font-size:13px;color:#7A5000;margin-top:16px}
+.verify-badge svg{width:16px;height:16px;flex-shrink:0}
+
+/* ── BACK LINK ── */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--teal-md);text-decoration:none;margin-bottom:32px;transition:gap .15s}
+.back-link:hover{gap:9px}
+
+/* ── FOOTER (matches index.html) ── */
+footer{background:var(--slate);color:#8AADA9;padding:28px 24px;text-align:center;font-size:13px;line-height:1.9}
+footer strong{color:white}
+footer a{color:#5BC4F5;text-decoration:none}
+
+/* ── SUCCESS STATE ── */
+.form-success{display:none;text-align:center;padding:28px;background:var(--teal-lt);border-radius:12px;border:1.5px solid var(--teal-md)}
+.form-success h4{font-family:'DM Serif Display',serif;font-size:20px;color:var(--slate);margin-bottom:6px}
+.form-success p{font-size:13px;color:var(--muted)}
+
+@media(max-width:600px){
+  .hero{padding:36px 16px}
+  .main{padding:36px 16px 56px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .contact-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zm0 10c-4.42 0-8 1.79-8 4v1h16v-1c0-2.21-3.58-4-8-4z"/></svg>
+      </div>
+      <span class="logo-text">Lake County <span>Health Resources</span></span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a href="index.html" class="nav-link">← Directory</a>
+      <a href="about.html" class="nav-link active">About</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">About this project</div>
+    <h1>Built by a student,<br><em>for the community</em></h1>
+    <p class="hero-sub">A free, trilingual health resource directory for Lake County, Illinois — created by a sophomore at Adlai E. Stevenson High School in Buffalo Grove.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to the directory
+  </a>
+
+  <!-- STORY -->
+  <div class="story">
+    <p class="section-label">My story</p>
+    <h2 class="section-title">Why I built this</h2>
+
+    <p>Growing up in Buffalo Grove, I watched families in our community — neighbors, classmates' parents, people at the library — struggle to find affordable medical care. Not because the resources didn't exist, but because <strong>nobody had put them all in one place</strong> in a way that was easy to find, easy to trust, and available in the languages people actually speak.</p>
+
+    <blockquote>
+      <p>"A family shouldn't have to spend hours searching the internet to find out where they can get a flu shot for free, or whether the clinic down the street accepts uninsured patients."</p>
+    </blockquote>
+
+    <p>I'm a sophomore at Adlai E. Stevenson High School, Class of 2027, and I have a deep interest in medicine and public health. I started noticing this gap — between the resources that exist in Lake County and the people who need them — and I wanted to do something about it that was actually useful, not just a school project that gets filed away.</p>
+
+    <p>So I built this. A free, searchable, bilingual directory of <strong>30+ verified health resources</strong> across Lake County — free clinics, mental health services, food pantries, dental care, immunization sites, and senior services. Every listing has been verified by phone. Every one includes the languages spoken, the hours, and whether you need insurance. And it's available in English, Spanish, and Polish, because those are the three most spoken languages in our county.</p>
+
+    <p>This site has no ads, no login, no cost to the people who use it. It is maintained by a high school student who believes that <strong>access to health information is a right, not a privilege</strong> — and that a teenager with a laptop can do something real about it.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num">30+</div>
+      <div class="stat-label">Verified resources across Lake County</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Categories of health & social services</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Languages — English, Spanish, Polish</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">Cost to use, forever</div>
+    </div>
+  </div>
+
+  <div class="verify-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    All listings last verified by phone — April 2026. Updated quarterly.
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- HOW IT WORKS -->
+  <p class="section-label">How it works</p>
+  <h2 class="section-title">How listings are verified</h2>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:24px">Unlike a Google search or a general database, every resource on this site has been personally checked. Here's the process:</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Phone verification</h4>
+        <p>Every organization is called directly to confirm their current address, phone number, hours, languages spoken, and whether they accept uninsured or Medicaid patients. If nobody answers after two attempts, the listing is held until confirmed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Quarterly re-verification</h4>
+        <p>Hours change. Phone numbers change. Organizations close or move. Every listing is re-verified by phone every three months and the "Last verified" date is updated. Stale listings are flagged or removed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Community submissions reviewed within 7 days</h4>
+        <p>Anyone can suggest a resource using the form below. Every submission is reviewed, called, and added within one week if it meets the criteria — free or low-cost, serving Lake County residents, currently operating.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>No paid listings, ever</h4>
+        <p>Organizations cannot pay to be listed or ranked higher. Inclusion is based solely on whether a resource is free or low-cost and genuinely serves Lake County families. This site has no advertisers and no commercial relationships.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SUGGEST A RESOURCE -->
+  <p class="section-label">Contribute</p>
+  <h2 class="section-title">Suggest a missing resource</h2>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:24px">Know a free clinic, food pantry, or health service in Lake County that isn't listed here? Help us keep this directory complete. Submissions are reviewed within 7 days.</p>
+
+  <div class="suggest-card">
+    <h3>Submit a resource</h3>
+    <p>Please include as much detail as you can. We'll verify everything before adding it to the directory.</p>
+
+    <form id="suggest-form" onsubmit="handleSubmit(event)">
+      <div class="suggest-fields">
+
+        <div>
+          <label class="field-label" for="org-name">Organization name <span style="color:#C84B2F">*</span></label>
+          <input class="field-input" id="org-name" type="text" placeholder="e.g. Waukegan Community Clinic" required>
+        </div>
+
+        <div>
+          <label class="field-label" for="category">Category <span style="color:#C84B2F">*</span></label>
+          <select class="field-input" id="category" required>
+            <option value="" disabled selected>Select a category…</option>
+            <option>Free Clinic</option>
+            <option>Mental Health</option>
+            <option>Food Assistance</option>
+            <option>Dental Care</option>
+            <option>Immunizations</option>
+            <option>Senior Care</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="field-label" for="address">Address</label>
+          <input class="field-input" id="address" type="text" placeholder="Street address, City, IL ZIP">
+        </div>
+
+        <div>
+          <label class="field-label" for="phone">Phone number <span style="color:#C84B2F">*</span></label>
+          <input class="field-input" id="phone" type="tel" placeholder="(847) 000-0000" required>
+        </div>
+
+        <div>
+          <label class="field-label" for="website">Website (if any)</label>
+          <input class="field-input" id="website" type="url" placeholder="https://…">
+        </div>
+
+        <div>
+          <label class="field-label" for="languages">Languages spoken</label>
+          <input class="field-input" id="languages" type="text" placeholder="e.g. English, Spanish">
+        </div>
+
+        <div>
+          <label class="field-label" for="notes">Anything else we should know?</label>
+          <textarea class="field-input" id="notes" placeholder="Hours, eligibility requirements, special services, why you're recommending it…"></textarea>
+        </div>
+
+        <div>
+          <label class="field-label" for="your-email">Your email (optional — only used if we have follow-up questions)</label>
+          <input class="field-input" id="your-email" type="email" placeholder="you@example.com">
+        </div>
+
+      </div>
+
+      <button type="submit" class="submit-btn">Submit resource for review →</button>
+      <p class="form-note">All submissions are reviewed within 7 days. We verify every listing by phone before publishing.</p>
+    </form>
+
+    <div class="form-success" id="form-success">
+      <h4>Thank you for your submission!</h4>
+      <p>We'll review and verify this resource within 7 days. If it meets our criteria, it will be added to the directory. You're helping Lake County families find the care they need.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- CONTACT -->
+  <p class="section-label">Get in touch</p>
+  <h2 class="section-title">Questions or feedback?</h2>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:16px">Have a question about a listing, want to partner with this project, or are you an organization that would like to be featured? Reach out.</p>
+
+  <div class="contact-row">
+    <a href="mailto:YOUR_EMAIL@d125.org" class="contact-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email the project
+    </a>
+    <a href="index.html" class="contact-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Back to the directory
+    </a>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted);margin-top:20px">
+    This is a student-run project. Response times may vary during the school year. Thank you for your patience.
+  </p>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Lake County Health Resources</strong> — A free community resource by a student at Adlai E. Stevenson High School, Buffalo Grove, IL.</p>
+  <p>All listings verified April 2026. For emergencies call <strong>911</strong>. Mental health crisis: <strong>(800) 345-9049</strong>.</p>
+  <p style="margin-top:6px;font-size:12px;opacity:.5">Not affiliated with or endorsed by any listed organization. Verify details by phone before visiting.</p>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+
+  /* In production, replace this with a fetch() to a Formspree or Google Apps Script endpoint */
+  /* e.g. fetch('https://formspree.io/f/YOURFORMID', { method:'POST', body: new FormData(e.target) }) */
+
+  document.getElementById('suggest-form').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+  window.scrollTo({ top: document.getElementById('form-success').offsetTop - 80, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
