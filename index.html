@@ -1,451 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lake County Health Resources</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f9; }
-    header { background: #2c7be5; color: white; padding: 15px; text-align: center; }
-    .container { padding: 20px; max-width: 1000px; margin: auto; }
-    .controls { margin-bottom: 15px; display: flex; flex-wrap: wrap; gap: 10px; }
-    select, input { padding: 8px; }
-    .card { background: white; padding: 15px; margin-bottom: 12px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .title { font-weight: bold; font-size: 18px; }
-    .category { color: #2c7be5; font-weight: bold; }
-    .tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 12px; margin-right: 6px; }
-    .free { background: #d4edda; }
-    .low { background: #fff3cd; }
-    iframe { width: 100%; height: 200px; border: 0; margin-top: 10px; border-radius: 8px; }
-    .form-section { background: white; padding: 20px; border-radius: 10px; margin-top: 30px; }
-    button { padding: 8px 12px; cursor: pointer; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lake County Health Guide — Free & Low-Cost Resources</title>
+<meta name="description" content="A free, bilingual directory of health resources in Lake County, Illinois — clinics, mental health, food, dental, immunizations, and senior care.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── Lake County Illinois official brand colors ── */
+  /* Primary: #00568C (official blue from lakecountyil.gov) */
+  /* Secondary: #0082CA (bright blue accent) */
+  /* Dark navy: #003A5C (deep header/footer) */
+  /* Gold accent: #C8972B (complements the blue) */
+
+  --teal:    #003A5C; /* deep navy — headers, footers */
+  --teal-lt: #E3EEF7; /* light blue tint — backgrounds */
+  --teal-md: #0082CA; /* bright Lake County accent blue */
+  --slate:   #002A45; /* darkest navy — primary text dark bg */
+  --slate2:  #00416B; /* mid-navy — secondary dark elements */
+  --muted:   #4A6070; /* blue-grey — muted text */
+  --border:  #C8DCF0; /* light blue border */
+  --bg:      #F0F6FB; /* very light blue page background */
+
+  /* Category badge colors — kept distinct but harmonized with blue palette */
+  --c-clinic:#00568C; --cl-clinic:#D6EAF8; /* official LC blue */
+  --c-mental:#5B3F9E; --cl-mental:#EDE8F8; /* purple */
+  --c-food:  #B45B10; --cl-food:  #FDF0E3; /* amber/orange */
+  --c-dental:#0082CA; --cl-dental:#D6EAF8; /* bright blue */
+  --c-immun: #C8972B; --cl-immun: #FEF6E3; /* gold — Lake County secondary */
+  --c-senior:#9E2D5E; --cl-senior:#FDEAF3; /* rose */
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--slate);line-height:1.6;font-size:15px}
+
+/* HEADER */
+header{background:var(--slate);padding:0 24px;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--teal-md)}
+.hdr{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:32px;height:32px;background:var(--teal-md);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px;fill:white}
+.logo-text{font-family:'DM Serif Display',serif;font-size:17px;color:white}
+.logo-text span{color:#5BC4F5}
+.lang-toggle{display:flex;background:var(--slate2);border-radius:6px;padding:3px;gap:2px;flex-shrink:0}
+.lang-btn{padding:4px 10px;border-radius:4px;border:none;background:transparent;color:#7AAFD4;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.lang-btn.active{background:var(--teal-md);color:white}
+
+/* HERO */
+.hero{background:var(--slate);padding:48px 24px 44px;text-align:center}
+.hero-inner{max-width:680px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#5BC4F5;background:rgba(0,130,202,.15);border:1px solid rgba(0,130,202,.3);padding:4px 14px;border-radius:99px;margin-bottom:18px}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,5vw,42px);line-height:1.15;color:white;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:#5BC4F5}
+.hero-sub{font-size:15px;color:#A8C8E0;margin-bottom:28px;line-height:1.6}
+.search-wrap{display:flex;gap:8px;max-width:520px;margin:0 auto}
+.search-box{flex:1;display:flex;align-items:center;background:white;border-radius:10px;border:1.5px solid var(--border);overflow:hidden;transition:border-color .15s}
+.search-box:focus-within{border-color:var(--teal-md)}
+.search-icon{padding:0 12px;color:var(--muted);flex-shrink:0}
+.search-box input{flex:1;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 12px 12px 0;color:var(--slate);background:transparent}
+.search-box input::placeholder{color:#8AAFC8}
+.btn-suggest{padding:12px 16px;background:var(--teal-md);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s;text-decoration:none;display:flex;align-items:center;gap:6px}
+.btn-suggest:hover{background:var(--teal)}
+
+/* STATS */
+.stats-bar{background:var(--teal);padding:12px 24px}
+.stats-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:13px}
+.stat strong{color:white;font-weight:600}
+.sdot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.25)}
+
+/* FILTERS */
+.filter-section{max-width:1100px;margin:22px auto 0;padding:0 24px}
+.filter-label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.filter-pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:7px 16px;border-radius:99px;border:1.5px solid var(--border);background:white;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif}
+.pill:hover{border-color:var(--teal-md);color:var(--slate)}
+.pill.active{background:var(--teal-lt);border-color:var(--teal-md);color:var(--slate);font-weight:600}
+.pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* COST FILTER */
+.cost-filter{max-width:1100px;margin:12px auto 0;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap}
+.cost-pill{padding:5px 14px;border-radius:99px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.cost-pill:hover{border-color:var(--teal-md);color:var(--slate)}
+.cost-pill.active{background:var(--teal-lt);border-color:var(--teal-md);color:var(--slate);font-weight:600}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:22px 24px 64px}
+.results-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.results-count{font-size:13px;color:var(--muted)}
+.results-count strong{color:var(--slate)}
+.verified-note{font-size:12px;color:var(--slate);background:var(--teal-lt);padding:4px 12px;border-radius:99px}
+
+/* GRID */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.card{background:white;border:1.5px solid var(--border);border-radius:14px;padding:18px 20px;transition:border-color .15s,transform .15s;display:flex;flex-direction:column}
+.card:hover{border-color:var(--teal-md);transform:translateY(-2px)}
+.card[data-cat="clinic"]{border-top:3px solid var(--c-clinic)}
+.card[data-cat="mental"]{border-top:3px solid var(--c-mental)}
+.card[data-cat="food"]  {border-top:3px solid var(--c-food)}
+.card[data-cat="dental"]{border-top:3px solid var(--c-dental)}
+.card[data-cat="immun"] {border-top:3px solid var(--c-immun)}
+.card[data-cat="senior"]{border-top:3px solid var(--c-senior)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.cat-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:99px;flex-shrink:0}
+.cat-clinic{background:var(--cl-clinic);color:var(--c-clinic)}
+.cat-mental{background:var(--cl-mental);color:var(--c-mental)}
+.cat-food  {background:var(--cl-food);  color:var(--c-food)}
+.cat-dental{background:var(--cl-dental);color:var(--c-dental)}
+.cat-immun {background:var(--cl-immun); color:var(--c-immun)}
+.cat-senior{background:var(--cl-senior);color:var(--c-senior)}
+.cost-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.cost-free{color:#00568C;background:#D6EAF8}
+.cost-low {color:#7A5000;background:#FEF6E3}
+.card h3{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.25;color:var(--slate);margin-bottom:5px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px;flex:1}
+.card-details{padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:5px}
+.drow{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted)}
+.dico{width:13px;height:13px;flex-shrink:0;margin-top:1px;opacity:.6}
+.lang-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.ltag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--teal-lt);color:var(--slate)}
+.card-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--teal-md);text-decoration:none;margin-top:10px;transition:gap .15s}
+.card-link:hover{gap:7px}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:64px 24px;display:none}
+.no-results.visible{display:block}
+.no-results h3{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+.no-results p{color:var(--muted);font-size:14px}
+
+/* SUGGEST BANNER */
+.suggest-banner{background:white;border:1.5px solid var(--border);border-radius:14px;padding:22px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:28px;flex-wrap:wrap}
+.suggest-text h4{font-size:15px;font-weight:600;margin-bottom:3px}
+.suggest-text p{font-size:13px;color:var(--muted)}
+.btn-outline{padding:9px 18px;border-radius:8px;border:1.5px solid var(--teal-md);background:transparent;color:var(--teal-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;text-decoration:none}
+.btn-outline:hover{background:var(--teal-lt)}
+
+/* FOOTER */
+footer{background:var(--slate);color:#8AADA9;padding:28px 24px;text-align:center;font-size:13px;line-height:1.9}
+footer strong{color:white}
+footer a{color:#5BC4F5;text-decoration:none}
+.card.hidden{display:none}
+@media(max-width:600px){
+  .hero{padding:32px 16px}
+  .search-wrap{flex-direction:column}
+  .stats-inner{gap:12px}
+  .sdot{display:none}
+  .main{padding:18px 16px 48px}
+}
+</style>
 </head>
 <body>
 
 <header>
-  <h1 id="title">Lake County Health Resources</h1>
-  <button onclick="setLanguage('en')">English</button>
-  <button onclick="setLanguage('es')">Español</button>
-  <button onclick="setLanguage('pl')">Polski</button>
+  <div class="hdr">
+    <a href="#" class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zm0 10c-4.42 0-8 1.79-8 4v1h16v-1c0-2.21-3.58-4-8-4z"/></svg></div>
+      <span class="logo-text">Lake County <span>Health Guide</span></span>
+    </a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
+      <button class="lang-btn" onclick="setLang('es',this)">ES</button>
+      <button class="lang-btn" onclick="setLang('pl',this)">PL</button>
+    </div>
+  </div>
 </header>
 
-<div class="container">
-  <div class="controls">
-    <input type="text" id="search" placeholder="Search..." onkeyup="filterResources()" />
-    <select id="categoryFilter" onchange="filterResources()">
-      <option value="all">All Categories</option>
-      <option value="clinic">Clinics</option>
-      <option value="mental">Mental Health</option>
-      <option value="food">Food Assistance</option>
-      <option value="dental">Dental Care</option>
-      <option value="immunization">Immunizations</option>
-      <option value="senior">Senior Services</option>
-    </select>
-    <select id="costFilter" onchange="filterResources()">
-      <option value="all">Free & Low-cost</option>
-      <option value="free">Free Only</option>
-      <option value="low">Low-cost Only</option>
-    </select>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Lake County, Illinois" data-es="Condado de Lake, Illinois" data-pl="Hrabstwo Lake, Illinois">Lake County, Illinois</div>
+    <h1 data-en="Find <em>free & low-cost</em> health resources near you"
+        data-es="Encuentra recursos de salud <em>gratuitos</em> cerca de ti"
+        data-pl="Znajdź <em>bezpłatne</em> zasoby zdrowotne blisko Ciebie">
+      Find <em>free & low-cost</em> health resources near you
+    </h1>
+    <p class="hero-sub"
+       data-en="A student-built directory of clinics, mental health, food assistance, dental care, immunizations, and senior services — verified and updated regularly."
+       data-es="Un directorio creado por estudiantes: clínicas, salud mental, alimentos, dental, vacunas y más — verificado regularmente."
+       data-pl="Katalog stworzony przez uczniów: kliniki, zdrowie psychiczne, pomoc żywnościowa, stomatologia, szczepienia i usługi dla seniorów.">
+      A student-built directory of clinics, mental health, food assistance, dental care, immunizations, and senior services — verified and updated regularly.
+    </p>
+    <div class="search-wrap">
+      <div class="search-box">
+        <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input type="text" id="search-input" placeholder="Search by name, city, or service…" oninput="filterCards()">
+      </div>
+      <a href="https://forms.gle/YOURFORMLINK" target="_blank" class="btn-suggest">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-en="Suggest a resource" data-es="Sugerir un recurso" data-pl="Zaproponuj zasób">Suggest a resource</span>
+      </a>
+    </div>
   </div>
+</section>
 
-  <div id="resourceList"></div>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><strong id="stat-count">30</strong>&nbsp;<span data-en="verified resources" data-es="recursos verificados" data-pl="zweryfikowanych zasobów">verified resources</span></div>
+    <div class="sdot"></div>
+    <div class="stat"><strong>6</strong>&nbsp;<span data-en="categories" data-es="categorías" data-pl="kategorii">categories</span></div>
+    <div class="sdot"></div>
+    <div class="stat"><strong data-en="3 languages" data-es="3 idiomas" data-pl="3 języki">3 languages</strong></div>
+    <div class="sdot"></div>
+    <div class="stat"><strong data-en="Last verified:" data-es="Última verificación:" data-pl="Ostatnia weryfikacja:">Last verified:</strong>&nbsp;April 2026</div>
+  </div>
 </div>
 
+<div class="filter-section">
+  <p class="filter-label" data-en="Filter by category" data-es="Filtrar por categoría" data-pl="Filtruj według kategorii">Filter by category</p>
+  <div class="filter-pills">
+    <button class="pill active" onclick="filterCat('all',this)"><span data-en="All resources" data-es="Todos" data-pl="Wszystkie">All resources</span></button>
+    <button class="pill" onclick="filterCat('clinic',this)"><span class="pdot" style="background:var(--c-clinic)"></span><span data-en="Free Clinics" data-es="Clínicas" data-pl="Kliniki">Free Clinics</span></button>
+    <button class="pill" onclick="filterCat('mental',this)"><span class="pdot" style="background:var(--c-mental)"></span><span data-en="Mental Health" data-es="Salud Mental" data-pl="Zdrowie Psychiczne">Mental Health</span></button>
+    <button class="pill" onclick="filterCat('food',this)"><span class="pdot" style="background:var(--c-food)"></span><span data-en="Food Assistance" data-es="Asistencia Alimentaria" data-pl="Pomoc Żywnościowa">Food Assistance</span></button>
+    <button class="pill" onclick="filterCat('dental',this)"><span class="pdot" style="background:var(--c-dental)"></span><span data-en="Dental Care" data-es="Atención Dental" data-pl="Stomatologia">Dental Care</span></button>
+    <button class="pill" onclick="filterCat('immun',this)"><span class="pdot" style="background:var(--c-immun)"></span><span data-en="Immunizations" data-es="Vacunaciones" data-pl="Szczepienia">Immunizations</span></button>
+    <button class="pill" onclick="filterCat('senior',this)"><span class="pdot" style="background:var(--c-senior)"></span><span data-en="Senior Care" data-es="Cuidado de Mayores" data-pl="Opieka nad Seniorami">Senior Care</span></button>
+  </div>
+</div>
+
+<div class="cost-filter">
+  <button class="cost-pill active" onclick="filterCost('all',this)" data-en="Any cost" data-es="Cualquier costo" data-pl="Dowolna cena">Any cost</button>
+  <button class="cost-pill" onclick="filterCost('free',this)" data-en="Free only" data-es="Solo gratuito" data-pl="Tylko bezpłatne">Free only</button>
+  <button class="cost-pill" onclick="filterCost('low',this)" data-en="Low cost / Sliding scale" data-es="Bajo costo" data-pl="Niski koszt">Low cost / Sliding scale</button>
+</div>
+
+<main class="main">
+  <div class="results-meta">
+    <p class="results-count"><strong id="visible-count">30</strong>&nbsp;<span data-en="resources found" data-es="recursos encontrados" data-pl="zasobów znalezionych">resources found</span></p>
+    <div class="verified-note" data-en="All listings verified April 2026" data-es="Verificado en abril de 2026" data-pl="Zweryfikowano w kwietniu 2026">All listings verified April 2026</div>
+  </div>
+  <div class="cards-grid" id="cards-grid"></div>
+  <div class="no-results" id="no-results">
+    <h3 id="nr-title">No resources found</h3>
+    <p id="nr-sub">Try a different search term, category, or cost filter.</p>
+  </div>
+  <div class="suggest-banner">
+    <div class="suggest-text">
+      <h4 data-en="Know a resource we're missing?" data-es="¿Conoces algún recurso que falta?" data-pl="Znasz brakujący zasób?">Know a resource we're missing?</h4>
+      <p data-en="Help keep this directory complete. Submissions reviewed within 7 days." data-es="Ayúdanos. Revisamos en 7 días." data-pl="Pomóż nam. Sprawdzamy w 7 dni.">Help keep this directory complete. Submissions reviewed within 7 days.</p>
+    </div>
+    <a href="https://forms.gle/YOURFORMLINK" target="_blank" class="btn-outline" data-en="Suggest a resource →" data-es="Sugerir un recurso →" data-pl="Zaproponuj zasób →">Suggest a resource →</a>
+  </div>
+</main>
+
+<footer>
+  <p><strong>Lake County Health Guide</strong> — A free community resource by a student at Adlai E. Stevenson High School, Buffalo Grove, IL.</p>
+  <p>All listings verified April 2026. For emergencies call <strong>911</strong>. Mental health crisis: <strong>(800) 345-9049</strong>.</p>
+  <p style="margin-top:6px;font-size:12px;opacity:.5">Not affiliated with or endorsed by any listed organization. Verify details by phone before visiting.</p>
+</footer>
+
 <script>
-let language = "en";
+/* ── DATA ─────────────────────────────────────────────────────── */
+const resources = [
 
-// Real data integration (multi-source)
-async function loadResources() {
-  try {
-    // Example APIs (replace with real endpoints)
-    const sources = [
-      'https://data.lakecountyil.gov/resource/health.json',
-      'https://api.open-data.org/health-resources',
-      'https://nonprofits.org/api/resources'
-    ];
+  /* FREE CLINICS (6) */
+  {name_en:"Aunt Martha's Health & Wellness (Waukegan)",name_es:"Aunt Martha's Salud (Waukegan)",name_pl:"Aunt Martha's Zdrowie (Waukegan)",
+   category:"clinic",cost:"low",
+   desc_en:"Federally qualified health center offering primary care, OB/GYN, pediatrics, and behavioral health. Sliding fee — no one turned away.",
+   desc_es:"Centro de salud con atención primaria, OB/GYN y pediatría. Escala móvil de honorarios.",
+   desc_pl:"Centrum zdrowia: opieka podstawowa, ginekologia, pediatria. Opłata wg dochodu.",
+   address:"1 N. Genesee St, Waukegan, IL 60085",contact:"(847) 775-2900",
+   hours:"Mon–Fri 8am–5pm; Sat by appt",langs:["English","Español"],url:"https://auntmartha.org"},
 
-    let combined = [];
+  {name_en:"Lake County Health Dept – Waukegan Clinic",name_es:"Departamento de Salud – Clínica Waukegan",name_pl:"Klinika Waukegan",
+   category:"clinic",cost:"low",
+   desc_en:"County primary care clinic offering immunizations, family planning, STI testing, WIC enrollment, and preventive services for all residents.",
+   desc_es:"Clínica pública con servicios de prevención, planificación familiar y WIC.",
+   desc_pl:"Publiczna klinika: szczepienia, planowanie rodziny, badania STI, WIC.",
+   address:"3010 Grand Ave, Waukegan, IL 60085",contact:"(847) 377-8000",
+   hours:"Mon–Fri 8am–4:30pm",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
 
-    for (let url of sources) {
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
+  {name_en:"Lake County Health Dept – Zion Clinic",name_es:"Departamento de Salud – Clínica Zion",name_pl:"Klinika Zion",
+   category:"clinic",cost:"low",
+   desc_en:"Primary care, immunizations, and preventive health services for northern Lake County residents. Walk-in and scheduled appointments.",
+   desc_es:"Atención primaria, vacunas y servicios preventivos en el norte del condado.",
+   desc_pl:"Podstawowa opieka zdrowotna i szczepienia dla północnej części hrabstwa.",
+   address:"Zion, IL 60099",contact:"(847) 746-0701",
+   hours:"Mon–Fri 8am–4:30pm",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
 
-        // Normalize data format
-        const normalized = data.map(item => ({
-          name_en: item.name || 'Unknown',
-          name_es: item.name_es || item.name || 'Desconocido',
-          name_pl: item.name_pl || item.name || 'Nieznany',
-          category: item.category || 'clinic',
-          cost: item.cost || 'low',
-          lat: item.lat || 42.18,
-          lng: item.lng || -87.95,
-          last_verified: item.last_verified || '2026-01-01',
-          description_en: item.description || '',
-          description_es: item.description_es || item.description || '',
-          description_pl: item.description_pl || item.description || '',
-          contact: item.phone || 'N/A'
-        }));
+  {name_en:"Lake County Health Dept – Grayslake Clinic",name_es:"Departamento de Salud – Clínica Grayslake",name_pl:"Klinika Grayslake",
+   category:"clinic",cost:"low",
+   desc_en:"Community health services including immunizations, screenings, and preventive care for central Lake County residents.",
+   desc_es:"Servicios de salud comunitaria e inmunización en Grayslake.",
+   desc_pl:"Usługi zdrowotne i szczepienia dla centralnej części hrabstwa.",
+   address:"Grayslake, IL 60030",contact:"(847) 377-8297",
+   hours:"Mon–Fri 8am–4:30pm",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
 
-        combined = combined.concat(normalized);
-      } catch (e) {
-        console.warn('Source failed:', url);
-      }
-    }
+  {name_en:"Howard Brown Health (North Chicago)",name_es:"Howard Brown Salud (North Chicago)",name_pl:"Howard Brown Zdrowie",
+   category:"clinic",cost:"low",
+   desc_en:"Inclusive primary care and dental services. LGBTQ+ affirming. Sliding fee scale; Medicaid accepted. No patient turned away.",
+   desc_es:"Atención primaria y dental inclusiva, LGBTQ+ afirmativa. Escala móvil.",
+   desc_pl:"Podstawowa opieka zdrowotna i stomatologiczna. Przyjazna dla LGBTQ+. Opłata wg dochodu.",
+   address:"North Chicago, IL 60064",contact:"(773) 388-1600",
+   hours:"Call for current hours",langs:["English","Español"],url:"https://howardbrownhealth.org"},
 
-    return combined.length ? combined : getFallbackData();
-  } catch (e) {
-    
-    return combined.length ? combined : [];
-  }
-}
+  {name_en:"North Chicago Community Partners",name_es:"Socios Comunitarios de North Chicago",name_pl:"Partnerzy Społeczności North Chicago",
+   category:"clinic",cost:"free",
+   desc_en:"Free wellness, education, and youth health programs in North Chicago. Connects underserved residents to primary care and social services.",
+   desc_es:"Programas de bienestar y salud juvenil gratuitos en North Chicago.",
+   desc_pl:"Bezpłatne programy zdrowotne i edukacyjne dla młodzieży.",
+   address:"North Chicago, IL 60064",contact:"(847) 785-2235",
+   hours:"Call for schedule",langs:["English","Español"],url:""},
 
-function getFallbackData() {
-  return [
-    {
-      name_en: "Community Health Clinic",
-      name_es: "Clínica de Salud Comunitaria",
-      name_pl: "Klinika Zdrowia",
-      category: "clinic",
-      cost: "free",
-      lat: 42.18,
-      lng: -87.95,
-      last_verified: "2026-03-01",
-      description_en: "Free primary care services.",
-      description_es: "Servicios gratuitos de atención primaria.",
-      description_pl: "Darmowa podstawowa opieka zdrowotna.",
-      contact: "(847) 123-4567"
-    }
-  ];
-}
+  /* MENTAL HEALTH (6) */
+  {name_en:"Lake County Health Dept – Behavioral Health",name_es:"Departamento de Salud – Salud Mental",name_pl:"Wydział Zdrowia Psychicznego",
+   category:"mental",cost:"low",
+   desc_en:"Outpatient mental health counseling, crisis intervention, substance use treatment, and psychiatric services. Sliding fee; Medicaid accepted.",
+   desc_es:"Consejería ambulatoria, intervención en crisis y tratamiento de adicciones. Escala móvil.",
+   desc_pl:"Poradnia zdrowia psychicznego, interwencja kryzysowa i leczenie uzależnień. Opłata wg dochodu.",
+   address:"3002 Grand Ave, Waukegan, IL 60085",contact:"(847) 377-8088",
+   hours:"Mon–Fri 8am–5pm · Crisis line 24/7: (800) 345-9049",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
 
-let resources = 
-[
-  {
-    name_en: "Lake County Health Department - Behavioral Health Services",
-    name_es: "Departamento de Salud del Condado de Lake - Servicios de Salud Mental",
-    name_pl: "Wydział Zdrowia Hrabstwa Lake - Usługi Zdrowia Psychicznego",
-    category: "mental",
-    cost: "low",
-    lat: 42.3636,
-    lng: -87.8337,
-    last_verified: "2026-04-01",
-    description_en: "Mental health treatment, counseling, crisis care, and therapy services.",
-    description_es: "Tratamiento de salud mental, consejería y servicios de crisis.",
-    description_pl: "Usługi zdrowia psychicznego, terapia i opieka kryzysowa.",
-    contact: "847-377-8180"
-  },
-  {
-    name_en: "Independence Center (Waukegan)",
-    name_es: "Centro de Independencia (Waukegan)",
-    name_pl: "Centrum Niezależności (Waukegan)",
-    category: "mental",
-    cost: "free",
-    lat: 42.3630,
-    lng: -87.8445,
-    last_verified: "2026-04-01",
-    description_en: "Community-based mental health recovery and support services.",
-    description_es: "Servicios comunitarios de recuperación de salud mental.",
-    description_pl: "Wsparcie i rehabilitacja zdrowia psychicznego.",
-    contact: "847-360-1020"
-  },
-  {
-    name_en: "Allendale Association (Lake Villa)",
-    name_es: "Asociación Allendale (Lake Villa)",
-    name_pl: "Stowarzyszenie Allendale (Lake Villa)",
-    category: "mental",
-    cost: "low",
-    lat: 42.4153,
-    lng: -88.0684,
-    last_verified: "2026-04-01",
-    description_en: "Mental health services for children, adolescents, and families.",
-    description_es: "Servicios de salud mental para niños y familias.",
-    description_pl: "Usługi zdrowia psychicznego dla dzieci i rodzin.",
-    contact: "847-356-3322"
-  },
-  {
-    name_en: "COOL Ministries Food Pantry (Waukegan)",
-    name_es: "Despensa de Alimentos COOL Ministries (Waukegan)",
-    name_pl: "Bank Żywności COOL Ministries (Waukegan)",
-    category: "food",
-    cost: "free",
-    lat: 42.3695,
-    lng: -87.8526,
-    last_verified: "2026-04-01",
-    description_en: "Monthly food distribution for individuals and families in need.",
-    description_es: "Distribución mensual de alimentos para familias necesitadas.",
-    description_pl: "Miesięczna pomoc żywnościowa dla rodzin.",
-    contact: "847-662-1230"
-  },
-  {
-    name_en: "Hope Food Pantry (Libertyville)",
-    name_es: "Despensa Hope (Libertyville)",
-    name_pl: "Bank Żywności Hope (Libertyville)",
-    category: "food",
-    cost: "free",
-    lat: 42.2831,
-    lng: -87.9531,
-    last_verified: "2026-04-01",
-    description_en: "Free groceries for residents facing food insecurity.",
-    description_es: "Alimentos gratuitos para residentes necesitados.",
-    description_pl: "Darmowa żywność dla potrzebujących.",
-    contact: "847-362-2110"
-  },
-  {
-    name_en: "Lake County Crisis Care Program",
-    name_es: "Programa de Crisis del Condado de Lake",
-    name_pl: "Program Kryzysowy Hrabstwa Lake",
-    category: "mental",
-    cost: "free",
-    lat: 42.3636,
-    lng: -87.8337,
-    last_verified: "2026-04-01",
-    description_en: "24/7 crisis intervention and mental health emergency support.",
-    description_es: "Apoyo de emergencia en salud mental las 24 horas.",
-    description_pl: "Całodobowa pomoc kryzysowa zdrowia psychicznego.",
-    contact: "847-377-8088"
-  },
-  {
-    name_en: "Lake County Health Department (Zion Clinic)",
-    name_es: "Departamento de Salud del Condado de Lake (Clínica Zion)",
-    name_pl: "Klinika Zdrowia (Zion)",
-    category: "clinic",
-    cost: "low",
-    lat: 42.4461,
-    lng: -87.8329,
-    last_verified: "2026-04-01",
-    description_en: "Primary care, immunizations, and preventive health services.",
-    description_es: "Atención primaria, vacunas y servicios preventivos.",
-    description_pl: "Podstawowa opieka zdrowotna i szczepienia.",
-    contact: "847-746-0701"
-  },
-  {
-    name_en: "Lake County Health Department (Grayslake Clinic)",
-    name_es: "Departamento de Salud del Condado de Lake (Clínica Grayslake)",
-    name_pl: "Klinika Zdrowia (Grayslake)",
-    category: "clinic",
-    cost: "low",
-    lat: 42.3445,
-    lng: -88.0417,
-    last_verified: "2026-04-01",
-    description_en: "Community health services including immunizations and screenings.",
-    description_es: "Servicios comunitarios de salud e inmunización.",
-    description_pl: "Usługi zdrowotne i szczepienia.",
-    contact: "847-377-8297"
-  },
-  {
-    name_en: "Lake County Health Department – Dental Services",
-    name_es: "Departamento de Salud – Servicios Dentales",
-    name_pl: "Usługi Dentystyczne Hrabstwa Lake",
-    category: "dental",
-    cost: "low",
-    lat: 42.3445,
-    lng: -88.0417,
-    last_verified: "2026-04-01",
-    description_en: "Affordable dental exams, cleanings, and preventive care.",
-    description_es: "Servicios dentales asequibles y preventivos.",
-    description_pl: "Tania opieka stomatologiczna i profilaktyczna.",
-    contact: "847-377-8000"
-  },
-  {
-    name_en: "Howard Brown Health (North Chicago)",
-    name_es: "Howard Brown Salud",
-    name_pl: "Howard Brown Zdrowie",
-    category: "clinic",
-    cost: "low",
-    lat: 42.3256,
-    lng: -87.8412,
-    last_verified: "2026-04-01",
-    description_en: "Primary care, dental, and LGBTQ+ inclusive health services.",
-    description_es: "Atención primaria y dental inclusiva.",
-    description_pl: "Opieka zdrowotna i stomatologiczna.",
-    contact: "773-388-1600"
-  },
-  {
-    name_en: "PADS Lake County (Shelter Services)",
-    name_es: "Refugio PADS del Condado de Lake",
-    name_pl: "Schronisko PADS Hrabstwa Lake",
-    category: "senior",
-    cost: "free",
-    lat: 42.3703,
-    lng: -87.9020,
-    last_verified: "2026-04-01",
-    description_en: "Emergency shelter and housing services for homeless individuals.",
-    description_es: "Refugio de emergencia para personas sin hogar.",
-    description_pl: "Schronienie dla osób bezdomnych.",
-    contact: "847-689-4357"
-  },
-  {
-    name_en: "Catholic Charities Lake County",
-    name_es: "Caridades Católicas del Condado de Lake",
-    name_pl: "Katolickie Organizacje Charytatywne",
-    category: "senior",
-    cost: "free",
-    lat: 42.3636,
-    lng: -87.8337,
-    last_verified: "2026-04-01",
-    description_en: "Senior support, counseling, and emergency assistance.",
-    description_es: "Apoyo para personas mayores y asistencia.",
-    description_pl: "Wsparcie dla seniorów i pomoc kryzysowa.",
-    contact: "847-782-4000"
-  },
-  {
-    name_en: "Waukegan Township Senior Center",
-    name_es: "Centro de Personas Mayores de Waukegan",
-    name_pl: "Centrum Seniora Waukegan",
-    category: "senior",
-    cost: "free",
-    lat: 42.3633,
-    lng: -87.8448,
-    last_verified: "2026-04-01",
-    description_en: "Meals, transportation, and wellness programs for seniors.",
-    description_es: "Comidas y programas para mayores.",
-    description_pl: "Posiłki i programy dla seniorów.",
-    contact: "847-244-9242"
-  },
-  {
-    name_en: "Moraine Township Food Pantry",
-    name_es: "Despensa de Alimentos Moraine",
-    name_pl: "Bank Żywności Moraine",
-    category: "food",
-    cost: "free",
-    lat: 42.2831,
-    lng: -87.9531,
-    last_verified: "2026-04-01",
-    description_en: "Emergency food support for residents in need.",
-    description_es: "Apoyo alimentario de emergencia.",
-    description_pl: "Pomoc żywnościowa dla potrzebujących.",
-    contact: "847-432-3240"
-  },
-  {
-    name_en: "Zion Benton Public Library – Community Services",
-    name_es: "Biblioteca Pública Zion Benton",
-    name_pl: "Biblioteka Publiczna Zion Benton",
-    category: "senior",
-    cost: "free",
-    lat: 42.4461,
-    lng: -87.8329,
-    last_verified: "2026-04-01",
-    description_en: "Community programs, internet access, and support services.",
-    description_es: "Programas comunitarios y acceso a internet.",
-    description_pl: "Programy społeczne i dostęp do internetu.",
-    contact: "847-746-1700"
-  },
-  {
-    name_en: "Highland Park Senior Center",
-    name_es: "Centro de Mayores Highland Park",
-    name_pl: "Centrum Seniora Highland Park",
-    category: "senior",
-    cost: "free",
-    lat: 42.1817,
-    lng: -87.8003,
-    last_verified: "2026-04-01",
-    description_en: "Health screenings, fitness, and social programs for seniors.",
-    description_es: "Programas de salud para mayores.",
-    description_pl: "Programy zdrowotne dla seniorów.",
-    contact: "847-432-4110"
-  },
-  {
-    name_en: "Lake County Haven (Domestic Violence Shelter)",
-    name_es: "Refugio Haven",
-    name_pl: "Schronisko Haven",
-    category: "senior",
-    cost: "free",
-    lat: 42.4167,
-    lng: -87.8445,
-    last_verified: "2026-04-01",
-    description_en: "Safe shelter and support for domestic violence survivors.",
-    description_es: "Refugio seguro para víctimas.",
-    description_pl: "Bezpieczne schronienie dla ofiar przemocy.",
-    contact: "847-249-4450"
-  },
-  {
-    name_en: "North Chicago Community Partners",
-    name_es: "Socios Comunitarios de North Chicago",
-    name_pl: "Partnerzy Społeczności North Chicago",
-    category: "clinic",
-    cost: "free",
-    lat: 42.3256,
-    lng: -87.8412,
-    last_verified: "2026-04-01",
-    description_en: "Education, wellness, and youth programs.",
-    description_es: "Programas educativos y de salud.",
-    description_pl: "Programy edukacyjne i zdrowotne.",
-    contact: "847-785-2235"
-  }
+  {name_en:"Lake County Crisis Care Program",name_es:"Programa de Crisis del Condado de Lake",name_pl:"Program Kryzysowy Hrabstwa Lake",
+   category:"mental",cost:"free",
+   desc_en:"24/7 crisis intervention and mental health emergency support by phone and in person. Available to all Lake County residents at no cost.",
+   desc_es:"Apoyo de emergencia en salud mental las 24 horas. Gratuito para todos los residentes.",
+   desc_pl:"Całodobowa pomoc kryzysowa zdrowia psychicznego. Bezpłatna dla wszystkich mieszkańców.",
+   address:"Waukegan, IL",contact:"(800) 345-9049 (24/7)",
+   hours:"24 hours / 7 days",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
+
+  {name_en:"Independence Center (Waukegan)",name_es:"Centro de Independencia (Waukegan)",name_pl:"Centrum Niezależności (Waukegan)",
+   category:"mental",cost:"free",
+   desc_en:"Community-based mental health recovery and peer support services. Drop-in programs for adults living with serious mental illness.",
+   desc_es:"Recuperación de salud mental comunitaria y apoyo entre pares.",
+   desc_pl:"Wsparcie środowiskowe dla dorosłych z poważnymi chorobami psychicznymi.",
+   address:"Waukegan, IL 60085",contact:"(847) 360-1020",
+   hours:"Call for schedule",langs:["English","Español"],url:""},
+
+  {name_en:"Allendale Association (Lake Villa)",name_es:"Asociación Allendale (Lake Villa)",name_pl:"Stowarzyszenie Allendale (Lake Villa)",
+   category:"mental",cost:"low",
+   desc_en:"Residential and outpatient mental health services for children, adolescents, and families in crisis. Medicaid and most insurance accepted.",
+   desc_es:"Servicios de salud mental para niños, adolescentes y familias en crisis.",
+   desc_pl:"Stacjonarne i ambulatoryjne usługi zdrowia psychicznego dla dzieci i rodzin.",
+   address:"Lake Villa, IL 60046",contact:"(847) 356-3322",
+   hours:"Call for hours",langs:["English","Español"],url:"https://allendale4kids.org"},
+
+  {name_en:"NAMI Lake County – Support Groups",name_es:"NAMI Condado de Lake – Grupos de Apoyo",name_pl:"NAMI Hrabstwo Lake – Grupy Wsparcia",
+   category:"mental",cost:"free",
+   desc_en:"Free peer-led support groups for individuals with mental illness and their families. NAMI Connection and NAMI Family Support groups meet weekly.",
+   desc_es:"Grupos de apoyo gratuitos para personas con enfermedades mentales y sus familias.",
+   desc_pl:"Bezpłatne grupy wsparcia dla osób z chorobami psychicznymi i ich rodzin.",
+   address:"Various Lake County locations",contact:"(847) 623-2735",
+   hours:"Weekly — see website for schedule",langs:["English"],url:"https://www.namilakecounty.org"},
+
+  {name_en:"Youth & Family Counseling – North Shore",name_es:"Consejería Juvenil y Familiar – North Shore",name_pl:"Poradnia dla Młodzieży i Rodzin",
+   category:"mental",cost:"low",
+   desc_en:"Individual and family counseling for children, teens, and adults in Highland Park and surrounding areas. Sliding fee; no one turned away.",
+   desc_es:"Consejería individual y familiar para niños y adolescentes. Tarifa según ingresos.",
+   desc_pl:"Indywidualna i rodzinna pomoc psychologiczna. Opłata wg dochodu.",
+   address:"Highland Park, IL 60035",contact:"(847) 234-3637",
+   hours:"Mon–Fri; evenings available",langs:["English","Español"],url:""},
+
+  /* FOOD ASSISTANCE (5) */
+  {name_en:"Northern Illinois Food Bank – Lake County",name_es:"Banco de Alimentos del Norte de Illinois",name_pl:"Bank Żywności Północnego Illinois",
+   category:"food",cost:"free",
+   desc_en:"30+ food pantries across Lake County distributing free groceries. Use zip-code finder on website. No documentation required at most sites.",
+   desc_es:"Más de 30 despensas en el condado. Sin documentos requeridos en la mayoría.",
+   desc_pl:"Ponad 30 banków żywności w hrabstwie. Wyszukaj po kodzie pocztowym.",
+   address:"Multiple locations — see website",contact:"(630) 443-6910",
+   hours:"Varies by location",langs:["English","Español"],url:"https://www.solvehungertoday.org"},
+
+  {name_en:"COOL Ministries Food Pantry (Waukegan)",name_es:"Despensa COOL Ministries (Waukegan)",name_pl:"Bank Żywności COOL Ministries",
+   category:"food",cost:"free",
+   desc_en:"Monthly food distribution for individuals and families in need in Waukegan. No proof of income required — all are welcome.",
+   desc_es:"Distribución mensual de alimentos en Waukegan. Sin requisitos de ingresos.",
+   desc_pl:"Miesięczna pomoc żywnościowa w Waukegan. Bez wymagań dochodowych.",
+   address:"Waukegan, IL 60085",contact:"(847) 662-1230",
+   hours:"Monthly — call for dates",langs:["English","Español"],url:""},
+
+  {name_en:"Hope Food Pantry (Libertyville)",name_es:"Despensa Hope (Libertyville)",name_pl:"Bank Żywności Hope (Libertyville)",
+   category:"food",cost:"free",
+   desc_en:"Free groceries for residents facing food insecurity in the Libertyville area. Friendly, dignified shopping environment — no appointment needed.",
+   desc_es:"Alimentos gratuitos para residentes con inseguridad alimentaria en Libertyville.",
+   desc_pl:"Darmowa żywność dla potrzebujących w okolicach Libertyville.",
+   address:"Libertyville, IL 60048",contact:"(847) 362-2110",
+   hours:"Tue & Thu; Sat mornings — call to confirm",langs:["English"],url:""},
+
+  {name_en:"Moraine Township Food Pantry",name_es:"Despensa de Alimentos Moraine",name_pl:"Bank Żywności Moraine",
+   category:"food",cost:"free",
+   desc_en:"Emergency food support for residents in the Moraine Township area (Highland Park, Highwood, Deerfield). No appointment required.",
+   desc_es:"Ayuda alimentaria de emergencia en Highland Park, Highwood y Deerfield.",
+   desc_pl:"Pomoc żywnościowa dla mieszkańców Moraine Township.",
+   address:"Highland Park area, IL",contact:"(847) 432-3240",
+   hours:"Call for current schedule",langs:["English"],url:""},
+
+  {name_en:"SNAP / LINK Card Enrollment – Illinois DHS",name_es:"Inscripción SNAP / LINK – Illinois DHS",name_pl:"Rejestracja SNAP / LINK – DHS Illinois",
+   category:"food",cost:"free",
+   desc_en:"Illinois SNAP (food stamps / LINK card) provides monthly grocery benefits. Apply online or at Waukegan DHS office. Income-based eligibility.",
+   desc_es:"Beneficios mensuales para compra de alimentos. Solicite en línea o en la oficina DHS.",
+   desc_pl:"Miesięczne świadczenia na zakup żywności. Złóż wniosek online lub w biurze DHS.",
+   address:"Waukegan DHS: 1 N. Genesee St, Suite 100",contact:"1-800-843-6154",
+   hours:"Mon–Fri 8:30am–5pm",langs:["English","Español","Polski"],url:"https://www.dhs.state.il.us/page.aspx?item=30357"},
+
+  /* DENTAL (4) */
+  {name_en:"Lake County Health Dept – Dental Services",name_es:"Departamento de Salud – Servicios Dentales",name_pl:"Usługi Dentystyczne Hrabstwa Lake",
+   category:"dental",cost:"low",
+   desc_en:"Affordable dental exams, cleanings, X-rays, and preventive care at county clinics. Sliding fee; Medicaid accepted. Appointment required.",
+   desc_es:"Exámenes, limpiezas y cuidado preventivo asequibles. Medicaid aceptado.",
+   desc_pl:"Przystępne cenowo badania, czyszczenie i profilaktyka. Medicaid akceptowany.",
+   address:"Grayslake, IL 60030",contact:"(847) 377-8000",
+   hours:"Mon–Fri by appointment",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
+
+  {name_en:"Aunt Martha's Dental Clinic",name_es:"Clínica Dental de Aunt Martha's",name_pl:"Klinika Stomatologiczna Aunt Martha's",
+   category:"dental",cost:"low",
+   desc_en:"Full-service dental including cleanings, fillings, extractions, and pediatric dentistry. Sliding fee scale; Medicaid and uninsured patients welcome.",
+   desc_es:"Dental completo: limpiezas, empastes, extracciones y pediatría. Escala móvil.",
+   desc_pl:"Pełna stomatologia: czyszczenie, wypełnienia, ekstrakcje i pediatria. Opłata wg dochodu.",
+   address:"Waukegan, IL — call for address",contact:"(847) 775-2900",
+   hours:"Mon–Fri; call for schedule",langs:["English","Español"],url:"https://auntmartha.org"},
+
+  {name_en:"Illinois Donated Dental Services (IDDS)",name_es:"Servicios Dentales Donados de Illinois",name_pl:"Darowane Usługi Stomatologiczne Illinois",
+   category:"dental",cost:"free",
+   desc_en:"Free comprehensive dental treatment from volunteer dentists for disabled, elderly, and medically compromised adults who cannot afford care.",
+   desc_es:"Tratamiento dental completo y gratuito para adultos discapacitados o de bajos ingresos.",
+   desc_pl:"Bezpłatne leczenie stomatologiczne dla osób niepełnosprawnych i starszych od wolontariuszy.",
+   address:"Statewide — call for Lake County referrals",contact:"(312) 836-7300",
+   hours:"Application required — waitlist may apply",langs:["English"],url:"https://www.iddsillinois.org"},
+
+  {name_en:"University of Illinois College of Dentistry – Clinics",name_es:"Clínica Dental de la Universidad de Illinois",name_pl:"Klinika Stomatologiczna Uniwersytetu Illinois",
+   category:"dental",cost:"low",
+   desc_en:"Supervised dental student clinics offering comprehensive care at significantly reduced rates. Most procedures available; appointment required.",
+   desc_es:"Clínicas supervisadas por estudiantes con tarifas muy reducidas.",
+   desc_pl:"Kliniki stomatologiczne prowadzone przez studentów pod nadzorem, znacznie tańsze.",
+   address:"Chicago, IL (serving Lake County residents)",contact:"(312) 996-7558",
+   hours:"Mon–Fri by appointment",langs:["English","Español"],url:"https://dentistry.uic.edu/patients"},
+
+  /* IMMUNIZATIONS (4) */
+  {name_en:"LCHD – Immunization Clinics (Waukegan)",name_es:"Clínicas de Vacunación LCHD (Waukegan)",name_pl:"Kliniki Szczepień LCHD (Waukegan)",
+   category:"immun",cost:"free",
+   desc_en:"Walk-in and scheduled clinics for flu, COVID-19, MMR, Tdap, Hepatitis, HPV, and more. VFC program — free vaccines for eligible children.",
+   desc_es:"Vacunas contra la gripe, COVID-19, MMR, Tdap y más. VFC gratuito para niños elegibles.",
+   desc_pl:"Szczepionki przeciw grypie, COVID-19, MMR, Tdap i innym. Program VFC bezpłatny dla dzieci.",
+   address:"3010 Grand Ave, Waukegan, IL 60085",contact:"(847) 377-8000",
+   hours:"Mon–Fri; some Sat — call for schedule",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
+
+  {name_en:"LCHD – Immunization Clinic (Grayslake)",name_es:"Clínica de Vacunación LCHD (Grayslake)",name_pl:"Klinika Szczepień LCHD (Grayslake)",
+   category:"immun",cost:"free",
+   desc_en:"Immunizations for children and adults at the Grayslake location. Vaccines for Children (VFC) program available at no cost for eligible kids.",
+   desc_es:"Vacunas para niños y adultos en Grayslake. VFC gratuito para niños elegibles.",
+   desc_pl:"Szczepienia dla dzieci i dorosłych w Grayslake. Program VFC bezpłatny.",
+   address:"Grayslake, IL 60030",contact:"(847) 377-8297",
+   hours:"Mon–Fri — call for schedule",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
+
+  {name_en:"Jewel-Osco Pharmacy – Flu & Travel Vaccines",name_es:"Farmacia Jewel-Osco – Vacunas",name_pl:"Apteka Jewel-Osco – Szczepienia",
+   category:"immun",cost:"low",
+   desc_en:"Walk-in flu, COVID-19, shingles, and travel vaccines at multiple Lake County Jewel-Osco locations. Most insurance accepted; low-cost without insurance.",
+   desc_es:"Vacunas contra la gripe, COVID y culebrilla en ubicaciones Jewel-Osco. Seguro aceptado.",
+   desc_pl:"Szczepionki przeciw grypie, COVID i półpaścowi w aptekach Jewel-Osco.",
+   address:"Multiple Lake County locations",contact:"See store locator",
+   hours:"Walk-in daily",langs:["English","Español"],url:"https://www.jewelosco.com/pharmacy"},
+
+  {name_en:"WIC Program – Lake County Health Dept",name_es:"Programa WIC – Departamento de Salud",name_pl:"Program WIC – Wydział Zdrowia",
+   category:"immun",cost:"free",
+   desc_en:"WIC (Women, Infants & Children) provides free healthy foods, immunization referrals, breastfeeding support, and health screenings for eligible families.",
+   desc_es:"WIC: alimentos nutritivos, derivaciones a vacunas y apoyo para amamantar. Para familias elegibles.",
+   desc_pl:"WIC: zdrowa żywność, skierowania na szczepienia i wsparcie w karmieniu piersią dla uprawnionych rodzin.",
+   address:"Waukegan & Grayslake LCHD offices",contact:"(847) 377-8130",
+   hours:"Mon–Fri 8am–4:30pm",langs:["English","Español"],url:"https://www.lakecountyil.gov/health"},
+
+  /* SENIOR CARE (5) */
+  {name_en:"Waukegan Township Senior Center",name_es:"Centro de Personas Mayores de Waukegan",name_pl:"Centrum Seniora Waukegan",
+   category:"senior",cost:"free",
+   desc_en:"Meals, transportation, and wellness programs for seniors in Waukegan. Congregate dining and Meals on Wheels available to homebound seniors.",
+   desc_es:"Comidas, transporte y programas de bienestar para personas mayores.",
+   desc_pl:"Posiłki, transport i programy wellness dla seniorów.",
+   address:"Waukegan, IL 60085",contact:"(847) 244-9242",
+   hours:"Mon–Fri 8am–4pm",langs:["English","Español"],url:""},
+
+  {name_en:"Highland Park Senior Center",name_es:"Centro de Mayores Highland Park",name_pl:"Centrum Seniora Highland Park",
+   category:"senior",cost:"free",
+   desc_en:"Health screenings, fitness classes, and social programs for adults 60+. Connects seniors to transportation and in-home support services.",
+   desc_es:"Exámenes de salud, clases de ejercicio y programas sociales para mayores.",
+   desc_pl:"Badania zdrowotne, zajęcia ruchowe i programy społeczne dla seniorów 60+.",
+   address:"Highland Park, IL 60035",contact:"(847) 432-4110",
+   hours:"Mon–Fri 8:30am–4:30pm",langs:["English"],url:""},
+
+  {name_en:"Catholic Charities Lake County",name_es:"Caridades Católicas del Condado de Lake",name_pl:"Katolickie Organizacje Charytatywne",
+   category:"senior",cost:"free",
+   desc_en:"Senior support, counseling, emergency financial assistance, and case management. Serves all residents regardless of faith background.",
+   desc_es:"Apoyo para mayores, consejería y asistencia de emergencia. Todos son bienvenidos.",
+   desc_pl:"Wsparcie dla seniorów, doradztwo i pomoc finansowa w nagłych przypadkach.",
+   address:"Waukegan, IL 60085",contact:"(847) 782-4000",
+   hours:"Mon–Fri 8:30am–4:30pm",langs:["English","Español"],url:"https://catholiccharities.net"},
+
+  {name_en:"PADS Lake County – Shelter Services",name_es:"Refugio PADS del Condado de Lake",name_pl:"Schronisko PADS Hrabstwa Lake",
+   category:"senior",cost:"free",
+   desc_en:"Emergency shelter and supportive housing for homeless individuals and families, including seniors. Connects guests to healthcare and social services.",
+   desc_es:"Refugio de emergencia y vivienda de apoyo para personas sin hogar.",
+   desc_pl:"Schronienie w nagłych przypadkach i wsparcie dla bezdomnych, w tym seniorów.",
+   address:"Waukegan, IL 60085",contact:"(847) 689-4357",
+   hours:"24-hour shelter — call for intake",langs:["English","Español"],url:"https://padslakecounty.org"},
+
+  {name_en:"Lake County Haven – Domestic Violence Services",name_es:"Refugio Lake County Haven",name_pl:"Schronisko Lake County Haven",
+   category:"senior",cost:"free",
+   desc_en:"Confidential shelter, legal advocacy, and counseling for domestic violence survivors of all ages. 24-hour crisis hotline available.",
+   desc_es:"Refugio confidencial y apoyo legal para víctimas de violencia doméstica.",
+   desc_pl:"Poufne schronienie i pomoc prawna dla ofiar przemocy domowej. Infolinia 24h.",
+   address:"Lake County, IL (confidential location)",contact:"(847) 249-4450 (24/7)",
+   hours:"24-hour crisis line",langs:["English","Español"],url:"https://lakecountyhaven.org"},
 
 ];
 
+/* ── RENDER ───────────────────────────────────────────────────── */
+const catLabel = {clinic:"Free Clinic",mental:"Mental Health",food:"Food Assistance",dental:"Dental Care",immun:"Immunizations",senior:"Senior Care"};
+const ICONS = {
+  pin:`<svg class="dico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  phone:`<svg class="dico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63 19.79 19.79 0 01.01 4 2 2 0 012 2h3"/></svg>`,
+  clock:`<svg class="dico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`
+};
 
-function renderResources(list) {
-  const container = document.getElementById("resourceList");
-  container.innerHTML = "";
+let currentLang = 'en';
 
-  list.forEach(res => {
-    const mapUrl = `https://maps.google.com/maps?q=${res.lat},${res.lng}&z=15&output=embed`;
-
-    const name = language === 'es' ? res.name_es : language === 'pl' ? res.name_pl : res.name_en;
-    const desc = language === 'es' ? res.description_es : language === 'pl' ? res.description_pl : res.description_en;
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div class="title">${name}</div>
-      <div class="category">${res.category}</div>
-      <span class="tag ${res.cost === 'free' ? 'free' : 'low'}">${res.cost}</span>
-      <p>${desc}</p>
-      <p><strong>Contact:</strong> ${res.contact}</p>
-      <p><strong>Last Verified:</strong> ${res.last_verified}</p>
-      <a href="https://www.google.com/maps/dir/?api=1&destination=${res.lat},${res.lng}" target="_blank">Get Directions</a>
-      <iframe src="${mapUrl}"></iframe>
-    `;
-
-    container.appendChild(card);
+function buildCards() {
+  const grid = document.getElementById('cards-grid');
+  grid.innerHTML = '';
+  resources.forEach((r, i) => {
+    const costClass = r.cost === 'free' ? 'cost-free' : 'cost-low';
+    const costLabel = r.cost === 'free' ? 'FREE' : 'Sliding Scale';
+    const langTags = r.langs.map(l => `<span class="ltag">${l}</span>`).join('');
+    const link = r.url ? `<a class="card-link" href="${r.url}" target="_blank" rel="noopener">Visit website →</a>` : '';
+    const desc = r[`desc_${currentLang}`] || r.desc_en;
+    const name = r[`name_${currentLang}`] || r.name_en;
+    grid.innerHTML += `
+    <div class="card" data-cat="${r.category}" data-cost="${r.cost}" data-idx="${i}">
+      <div class="card-top">
+        <span class="cat-badge cat-${r.category}">${catLabel[r.category]}</span>
+        <span class="cost-badge ${costClass}">${costLabel}</span>
+      </div>
+      <h3>${name}</h3>
+      <p class="card-desc">${desc}</p>
+      <div class="card-details">
+        ${r.address ? `<div class="drow">${ICONS.pin}<span>${r.address}</span></div>` : ''}
+        <div class="drow">${ICONS.phone}<span>${r.contact}</span></div>
+        ${r.hours ? `<div class="drow">${ICONS.clock}<span>${r.hours}</span></div>` : ''}
+        <div class="lang-tags">${langTags}</div>
+      </div>
+      ${link}
+    </div>`;
   });
+  document.getElementById('stat-count').textContent = resources.length;
+  filterCards();
 }
 
-function filterResources() {
-  const search = document.getElementById("search").value.toLowerCase();
-  const category = document.getElementById("categoryFilter").value;
-  const cost = document.getElementById("costFilter").value;
+/* ── FILTER ───────────────────────────────────────────────────── */
+let activeCat = 'all', activeCost = 'all';
 
-  const filtered = resources.filter(res => {
-    const name = (language === 'es' ? res.name_es : language === 'pl' ? res.name_pl : res.name_en).toLowerCase();
-    return (
-      name.includes(search) &&
-      (category === "all" || res.category === category) &&
-      (cost === "all" || res.cost === cost)
-    );
+function filterCards() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.card');
+  let n = 0;
+  cards.forEach(c => {
+    const catOk  = activeCat  === 'all' || c.dataset.cat  === activeCat;
+    const costOk = activeCost === 'all' || c.dataset.cost === activeCost;
+    const txt = c.innerText.toLowerCase();
+    const qOk = q === '' || txt.includes(q);
+    const show = catOk && costOk && qOk;
+    c.classList.toggle('hidden', !show);
+    if (show) n++;
   });
-
-  renderResources(filtered);
+  document.getElementById('visible-count').textContent = n;
+  document.getElementById('no-results').classList.toggle('visible', n === 0);
 }
 
-function setLanguage(lang) {
-  language = lang;
-  document.getElementById("title").innerText =
-    lang === 'es' ? "Recursos de Salud del Condado de Lake" :
-    lang === 'pl' ? "Zasoby Zdrowia Hrabstwa Lake" :
-    "Lake County Health Resources";
-  filterResources();
+function filterCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
 }
 
-function submitForm(e) {
-  e.preventDefault();
-  document.getElementById("formMessage").innerText = "Thank you for volunteering!";
+function filterCost(cost, btn) {
+  activeCost = cost;
+  document.querySelectorAll('.cost-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
 }
 
-(async function init() {
-  const apiData = await loadResources();
+/* ── LANGUAGE ─────────────────────────────────────────────────── */
+const T = {
+  en:{ph:'Search by name, city, or service…',nrTitle:'No resources found',nrSub:'Try a different search term, category, or cost filter.'},
+  es:{ph:'Buscar por nombre, ciudad o servicio…',nrTitle:'No se encontraron recursos',nrSub:'Intenta con otro término, categoría o filtro de costo.'},
+  pl:{ph:'Szukaj po nazwie, mieście lub usłudze…',nrTitle:'Nie znaleziono zasobów',nrSub:'Spróbuj innego terminu, kategorii lub filtra kosztów.'}
+};
 
-  // 🔥 Merge API data + your hardcoded data instead of overwriting
-  resources = [...resources, ...apiData];
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll(`[data-${lang}]`).forEach(el => { el.innerHTML = el.getAttribute(`data-${lang}`); });
+  document.getElementById('search-input').placeholder = T[lang].ph;
+  document.getElementById('nr-title').textContent = T[lang].nrTitle;
+  document.getElementById('nr-sub').textContent   = T[lang].nrSub;
+  buildCards(); // re-render with new language
+}
 
-  renderResources(resources);
-})();
+/* ── INIT ─────────────────────────────────────────────────────── */
+buildCards();
 </script>
-
 </body>
 </html>
