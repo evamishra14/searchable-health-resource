@@ -282,6 +282,44 @@ footer a{color:#5BC4F5;text-decoration:none}
     <h3 id="nr-title">No resources found</h3>
     <p id="nr-sub">Try a different search term, category, or cost filter.</p>
   </div>
+  <section class="engagement-section" aria-label="Support Lake County Health Guide">
+    <div class="engagement-card">
+      <div class="engagement-intro">
+        <h2>Help us make this guide better</h2>
+        <p>If this directory helped you, let us know. You can like the site, subscribe for updates, or leave a comment with feedback or a resource we should add.</p>
+        <div class="engagement-actions">
+          <button class="engage-btn" id="like-btn" type="button" onclick="toggleLike()" aria-pressed="false">
+            <span id="like-icon">♡</span><span id="like-label">Like this site</span>
+          </button>
+          <span class="engage-count" id="like-count">0 likes</span>
+        </div>
+      </div>
+
+      <div class="subscribe-box">
+        <h3>Subscribe for updates</h3>
+        <p>Get notified when new health resources are added or existing listings are updated.</p>
+        <form class="subscribe-form" onsubmit="subscribeUser(event)">
+          <input id="subscriber-email" type="email" placeholder="Your email address" autocomplete="email" required aria-label="Email address">
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="subscribe-status" id="subscribe-status" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="comments-section" id="comments" aria-label="Comments">
+    <div class="comments-card">
+      <h2>Comments & feedback</h2>
+      <p class="comment-help">Have a suggestion, found an outdated listing, or want to share your experience? Leave a comment below.</p>
+      <form class="comment-form" onsubmit="addComment(event)">
+        <input id="comment-name" type="text" maxlength="60" placeholder="Your name" autocomplete="name" required aria-label="Your name">
+        <textarea id="comment-text" maxlength="500" placeholder="Write your comment…" required aria-label="Your comment"></textarea>
+        <button type="submit">Post comment</button>
+      </form>
+      <div class="comments-list" id="comments-list"></div>
+    </div>
+  </section>
+
   <div class="suggest-banner">
     <div class="suggest-text">
       <h4 data-en="Know a resource we're missing?" data-es="¿Conoces algún recurso que falta?" data-pl="Znasz brakujący zasób?">Know a resource we're missing?</h4>
