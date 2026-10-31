@@ -690,16 +690,17 @@ function paintLike(liked){
 if (store.get('lchr_liked')) paintLike(true);
 
 window.handleLike = async () => {
-  const liked = !store.get('lchr_liked');
-  liked ? store.set('lchr_liked')('1') : store.del('lchr_liked');
+  const wasLiked = !!store.get('lchr_liked');
+  const liked = !wasLiked;
   paintLike(liked);
   try {
     await updateDoc(siteRef,{likes:increment(liked?1:-1)});
+    liked ? store.set('lchr_liked')('1') : store.del('lchr_liked');
   } catch(e){
     console.error('Like failed:', e.code, e.message);
-    liked ? store.del('lchr_liked') : store.set('lchr_liked')('1');
-    paintLike(!liked);
+    paintLike(wasLiked);
   }
+
 };
 
 /* ── LIVE COMMENTS (approved only) ── */
