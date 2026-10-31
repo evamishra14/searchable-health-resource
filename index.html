@@ -9,121 +9,6 @@
   gtag('js', new Date());
   gtag('config', 'G-K0DNK5NLPJ');
 </script>
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getFirestore,doc,collection,onSnapshot,updateDoc,addDoc,increment,query,where,serverTimestamp}
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = { /* ← paste your config here */ };
-const db = getFirestore(initializeApp(firebaseConfig));
-
-const $ = id => document.getElementById(id);
-const store = {
-  get:k=>{try{return localStorage.getItem(k)}catch{return null}},
-  set:k=>v=>{try{localStorage.setItem(k,v)}catch{}},
-  del:k=>{try{localStorage.removeItem(k)}catch{}}
-};
-const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const show = (el,msg) => { el.textContent = msg; el.style.display = 'block'; };
-
-/* ── LIVE LIKES ── */
-const siteRef = doc(db,'meta','site');
-onSnapshot(siteRef, s => { if (s.exists()) $('like-num').textContent = s.data().likes || 0; });
-
-function paintLike(liked){
-  const btn=$('like-btn'), icon=btn.querySelector('svg');
-  btn.classList.toggle('liked',liked);
-  btn.setAttribute('aria-pressed',liked);
-  icon.setAttribute('fill',liked?'#D94068':'none');
-  icon.setAttribute('stroke',liked?'#D94068':'currentColor');
-  $('like-label').textContent = liked ? T[currentLang].likeDone : T[currentLang].likeDefault;
-}
-if (store.get('lchr_liked')) paintLike(true);
-
-window.handleLike = async () => {
-  const liked = !store.get('lchr_liked');
-  liked ? store.set('lchr_liked')('1') : store.del('lchr_liked');
-  paintLike(liked);
-  try { await updateDoc(siteRef,{likes:increment(liked?1:-1)}); } catch(e){ console.error(e); }
-};
-
-/* ── LIVE COMMENTS (approved only) ── */
-const COLORS=['#0082CA','#5B3F9E','#B45B10','#0B6E5A','#9E2D5E','#C8972B','#003A5C'];
-const likedComments = new Set(JSON.parse(store.get('lchr_cl')||'[]'));
-
-onSnapshot(query(collection(db,'comments'),where('approved','==',true)), snap => {
-  const items = snap.docs.map(d=>({id:d.id,...d.data()}))
-    .sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  $('comment-count-pill').textContent = items.length;
-  $('comment-stat-num').textContent = items.length;
-  $('comment-list').innerHTML = items.length ? items.map(c=>{
-    const ini = c.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    const color = COLORS[[...c.name].reduce((a,ch)=>a+ch.charCodeAt(0),0)%COLORS.length];
-    const date = c.createdAt ? c.createdAt.toDate().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
-    const liked = likedComments.has(c.id);
-    return `<div class="comment-item">
-      <div class="c-head"><div class="c-avatar" style="background:${color}" aria-hidden="true">${esc(ini)}</div>
-        <div class="c-meta"><span class="c-name">${esc(c.name)}</span><span class="c-date">${date}</span></div></div>
-      <div class="c-body">${esc(c.body)}</div>
-      <div class="c-actions"><button class="c-like-btn ${liked?'liked':''}" data-id="${c.id}" aria-label="Mark as helpful">
-        <svg viewBox="0 0 24 24" fill="${liked?'#C0304A':'none'}" stroke="${liked?'#C0304A':'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
-        Helpful&nbsp;(${c.likes||0})</button></div></div>`;
-  }).join('') : `<div class="no-comments"><p>No comments yet. Be the first to share.</p></div>`;
-});
-
-$('comment-list').addEventListener('click', async e => {
-  const btn = e.target.closest('.c-like-btn'); if (!btn) return;
-  const id = btn.dataset.id, was = likedComments.has(id);
-  was ? likedComments.delete(id) : likedComments.add(id);
-  store.set('lchr_cl')(JSON.stringify([...likedComments]));
-  try { await updateDoc(doc(db,'comments',id),{likes:increment(was?-1:1)}); } catch(err){ console.error(err); }
-});
-
-window.updateChar = () => { $('cf-char-num').textContent = $('cf-body').value.length; };
-
-window.handleComment = async e => {
-  e.preventDefault();
-  const name=$('cf-name').value.trim(), body=$('cf-body').value.trim(), email=$('cf-email').value.trim();
-  if(!name||!body) return;
-  try {
-    await addDoc(collection(db,'comments'),{name,body,approved:false,likes:0,createdAt:serverTimestamp()});
-    await addDoc(collection(db,'private_contacts'),{email,type:'comment',createdAt:serverTimestamp()});
-    e.target.reset(); $('cf-char-num').textContent='0';
-    show($('cf-msg'),'Thank you! Your comment will appear once it has been reviewed.');
-  } catch(err){ console.error(err); show($('cf-msg'),'Sorry, something went wrong. Please try again.'); }
-};
-
-/* ── SUBSCRIBE ── */
-window.handleSubscribe = async e => {
-  e.preventDefault();
-  try {
-    await addDoc(collection(db,'private_contacts'),{email:$('sub-email').value.trim(),type:'subscriber',createdAt:serverTimestamp()});
-    $('sub-form').style.display='none'; $('sub-success').style.display='block';
-  } catch(err){ console.error(err); alert('Sorry, subscription failed. Please try again.'); }
-};
-
-/* ── SUGGEST A RESOURCE ── */
-window.openSuggest = () => { $('suggest-modal').style.display='flex'; };
-window.closeSuggest = () => { $('suggest-modal').style.display='none'; };
-$('suggest-modal').addEventListener('click', e => { if (e.target.id==='suggest-modal') closeSuggest(); });
-
-window.submitSuggest = async e => {
-  e.preventDefault();
-  if ($('sg-hp').value) return;                       // honeypot: bots fill this
-  const last = +store.get('lchr_sg_t')||0;
-  if (Date.now()-last < 60000) return show($('sg-msg'),'Please wait a minute before submitting another.');
-  try {
-    await addDoc(collection(db,'suggestions'),{
-      name:$('sg-name').value.trim(), category:$('sg-cat').value, city:$('sg-city').value.trim(),
-      phone:$('sg-phone').value.trim(), website:$('sg-web').value.trim(), notes:$('sg-notes').value.trim(),
-      email:$('sg-email').value.trim(), status:'pending', createdAt:serverTimestamp()
-    });
-    store.set('lchr_sg_t')(String(Date.now()));
-    e.target.reset();
-    show($('sg-msg'),'Thank you! We review suggestions within 7 days.');
-  } catch(err){ console.error(err); show($('sg-msg'),'Sorry, something went wrong. Please try again.'); }
-};
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Health Resources Lake County IL | Clinics, Food, Mental Health, Dental</title>
@@ -485,7 +370,7 @@ footer a{color:#5BC4F5;text-decoration:none}
 
       <!-- Like count -->
       <div class="like-stat">
-        <span class="like-stat-num" id="like-num">47</span>
+        <span class="like-stat-num" id="like-num">0</span>
         <span class="like-stat-label" data-en="people found this helpful" data-es="personas lo encontraron útil" data-pl="osoby uznały to za pomocne">people found this helpful</span>
       </div>
 
@@ -493,7 +378,7 @@ footer a{color:#5BC4F5;text-decoration:none}
 
       <!-- Comment count -->
       <div class="comment-stat">
-        <span class="comment-stat-num" id="comment-stat-num">3</span>
+        <span class="comment-stat-num" id="comment-stat-num">0</span>
         <span class="comment-stat-label" data-en="community comments" data-es="comentarios" data-pl="komentarze">community comments</span>
       </div>
 
@@ -546,7 +431,7 @@ footer a{color:#5BC4F5;text-decoration:none}
     <div class="comments-header">
       <h3>
         Community comments
-        <span class="comment-count-pill" id="comment-count-pill">3</span>
+        <span class="comment-count-pill" id="comment-count-pill">0</span>
       </h3>
       <span class="comments-header-note" data-en="All comments reviewed before publishing" data-es="Comentarios revisados antes de publicarse" data-pl="Komentarze przeglądane przed publikacją">All comments reviewed before publishing</span>
     </div>
@@ -730,21 +615,7 @@ function setLang(lang,btn){
 }
 
 /* ── LIKE ───────────────────────────────────────────────────── */
-let isLiked=false,likeCount=47;
-function handleLike(){
-  const btn=document.getElementById('like-btn');
-  const lbl=document.getElementById('like-label');
-  const num=document.getElementById('like-num');
-  const icon=btn.querySelector('svg');
-  isLiked=!isLiked;
-  likeCount+=isLiked?1:-1;
-  num.textContent=likeCount;
-  btn.classList.toggle('liked',isLiked);
-  btn.setAttribute('aria-pressed',isLiked);
-  icon.setAttribute('fill',isLiked?'#D94068':'none');
-  icon.setAttribute('stroke',isLiked?'#D94068':'currentColor');
-  lbl.textContent=isLiked?T[currentLang].likeDone:T[currentLang].likeDefault;
-}
+
 
 /* ── COPY LINK ──────────────────────────────────────────────── */
 function copyLink(btn){
@@ -758,79 +629,17 @@ function copyLink(btn){
 }
 
 /* ── SUBSCRIBE ──────────────────────────────────────────────── */
-function handleSubscribe(e){
-  e.preventDefault();
-  /* Production: fetch('https://formspree.io/f/YOUR_ID',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('sub-email').value})}) */
-  document.getElementById('sub-form').style.display='none';
-  document.getElementById('sub-success').style.display='block';
-}
 
 /* ── COMMENTS ───────────────────────────────────────────────── */
 const AVATAR_COLORS=['#0082CA','#5B3F9E','#B45B10','#0B6E5A','#9E2D5E','#C8972B','#003A5C'];
-let commentCount=3;
 
 function updateChar(){
   document.getElementById('cf-char-num').textContent=document.getElementById('cf-body').value.length;
 }
 
-function likeComment(btn){
-  const wasLiked=btn.classList.toggle('liked');
-  const svg=btn.querySelector('svg');
-  svg.setAttribute('fill',wasLiked?'#C0304A':'none');
-  svg.setAttribute('stroke',wasLiked?'#C0304A':'currentColor');
-  // parse and update count
-  const txt=btn.textContent.trim();
-  const m=txt.match(/\((\d+)\)/);
-  if(m){
-    const n=parseInt(m[1])+(wasLiked?1:-1);
-    btn.innerHTML=btn.innerHTML.replace(/\(\d+\)/,`(${n})`);
-  }
 }
 
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function handleComment(e){
-  e.preventDefault();
-  const name=document.getElementById('cf-name').value.trim();
-  const body=document.getElementById('cf-body').value.trim();
-  if(!name||!body)return;
-
-  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const color=AVATAR_COLORS[commentCount%AVATAR_COLORS.length];
-  const date=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-
-  const item=document.createElement('div');
-  item.className='comment-item';
-  item.innerHTML=`
-    <div class="c-head">
-      <div class="c-avatar" style="background:${color}" aria-hidden="true">${initials}</div>
-      <div class="c-meta">
-        <span class="c-name">${esc(name)}<span class="c-new-badge">New</span></span>
-        <span class="c-date">${date}</span>
-      </div>
-    </div>
-    <div class="c-body">${esc(body)}</div>
-    <div class="c-actions">
-      <button class="c-like-btn" onclick="likeComment(this)" aria-label="Mark as helpful">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/>
-          <path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/>
-        </svg>
-        Helpful&nbsp;(0)
-      </button>
-    </div>`;
-
-  const list=document.getElementById('comment-list');
-  list.insertBefore(item,list.firstChild);
-
-  commentCount++;
-  document.getElementById('comment-count-pill').textContent=commentCount;
-  document.getElementById('comment-stat-num').textContent=commentCount;
-
-  e.target.reset();
-  document.getElementById('cf-char-num').textContent='0';
-  item.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
 
 /* ── INIT + SCHEMAS ─────────────────────────────────────────── */
 buildCards();
@@ -870,5 +679,140 @@ function buildSchemas(){
     </form>
   </div>
 </div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,doc,collection,onSnapshot,updateDoc,addDoc,increment,query,where,serverTimestamp}
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = { apiKey: "AIzaSyDE4G2bRt8skImS_k2OS5DJeNXO2VVhKMk",
+  authDomain: "lakecountyhealthresources.firebaseapp.com",
+  projectId: "lakecountyhealthresources",
+  storageBucket: "lakecountyhealthresources.firebasestorage.app",
+  messagingSenderId: "897203031147",
+  appId: "1:897203031147:web:cd9d0d0aa8f6697013b52e",
+  measurementId: "G-XG7PH0RXTW" };
+const db = getFirestore(initializeApp(firebaseConfig));
+
+const $ = id => document.getElementById(id);
+const store = {
+  get:k=>{try{return localStorage.getItem(k)}catch{return null}},
+  set:k=>v=>{try{localStorage.setItem(k,v)}catch{}},
+  del:k=>{try{localStorage.removeItem(k)}catch{}}
+};
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const show = (el,msg) => { el.textContent = msg; el.style.display = 'block'; };
+
+
+/* ── LIVE LIKES ── */
+const siteRef = doc(db,'meta','site');
+onSnapshot(siteRef,
+  s => {
+    if (s.exists()) $('like-num').textContent = s.data().likes || 0;
+    else console.error('meta/site document is missing in Firestore');
+  },
+  err => console.error('Likes listener failed:', err.code, err.message)
+);
+
+function paintLike(liked){
+  const btn=$('like-btn'), icon=btn.querySelector('svg');
+  btn.classList.toggle('liked',liked);
+  btn.setAttribute('aria-pressed',liked);
+  icon.setAttribute('fill',liked?'#D94068':'none');
+  icon.setAttribute('stroke',liked?'#D94068':'currentColor');
+  $('like-label').textContent = liked ? T[currentLang].likeDone : T[currentLang].likeDefault;
+}
+if (store.get('lchr_liked')) paintLike(true);
+
+window.handleLike = async () => {
+  const liked = !store.get('lchr_liked');
+  liked ? store.set('lchr_liked')('1') : store.del('lchr_liked');
+  paintLike(liked);
+  try {
+    await updateDoc(siteRef,{likes:increment(liked?1:-1)});
+  } catch(e){
+    console.error('Like failed:', e.code, e.message);
+    liked ? store.del('lchr_liked') : store.set('lchr_liked')('1');
+    paintLike(!liked);
+  }
+};
+
+/* ── LIVE COMMENTS (approved only) ── */
+const COLORS=['#0082CA','#5B3F9E','#B45B10','#0B6E5A','#9E2D5E','#C8972B','#003A5C'];
+const likedComments = new Set(JSON.parse(store.get('lchr_cl')||'[]'));
+
+onSnapshot(query(collection(db,'comments'),where('approved','==',true)), snap => {
+  const items = snap.docs.map(d=>({id:d.id,...d.data()}))
+    .sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  $('comment-count-pill').textContent = items.length;
+  $('comment-stat-num').textContent = items.length;
+  $('comment-list').innerHTML = items.length ? items.map(c=>{
+    const ini = c.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const color = COLORS[[...c.name].reduce((a,ch)=>a+ch.charCodeAt(0),0)%COLORS.length];
+    const date = c.createdAt ? c.createdAt.toDate().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+    const liked = likedComments.has(c.id);
+    return `<div class="comment-item">
+      <div class="c-head"><div class="c-avatar" style="background:${color}" aria-hidden="true">${esc(ini)}</div>
+        <div class="c-meta"><span class="c-name">${esc(c.name)}</span><span class="c-date">${date}</span></div></div>
+      <div class="c-body">${esc(c.body)}</div>
+      <div class="c-actions"><button class="c-like-btn ${liked?'liked':''}" data-id="${c.id}" aria-label="Mark as helpful">
+        <svg viewBox="0 0 24 24" fill="${liked?'#C0304A':'none'}" stroke="${liked?'#C0304A':'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+        Helpful&nbsp;(${c.likes||0})</button></div></div>`;
+  }).join('') : `<div class="no-comments"><p>No comments yet. Be the first to share.</p></div>`;
+});
+
+$('comment-list').addEventListener('click', async e => {
+  const btn = e.target.closest('.c-like-btn'); if (!btn) return;
+  const id = btn.dataset.id, was = likedComments.has(id);
+  was ? likedComments.delete(id) : likedComments.add(id);
+  store.set('lchr_cl')(JSON.stringify([...likedComments]));
+  try { await updateDoc(doc(db,'comments',id),{likes:increment(was?-1:1)}); } catch(err){ console.error(err); }
+});
+
+window.updateChar = () => { $('cf-char-num').textContent = $('cf-body').value.length; };
+
+window.handleComment = async e => {
+  e.preventDefault();
+  const name=$('cf-name').value.trim(), body=$('cf-body').value.trim(), email=$('cf-email').value.trim();
+  if(!name||!body) return;
+  try {
+    await addDoc(collection(db,'comments'),{name,body,approved:false,likes:0,createdAt:serverTimestamp()});
+    await addDoc(collection(db,'private_contacts'),{email,type:'comment',createdAt:serverTimestamp()});
+    e.target.reset(); $('cf-char-num').textContent='0';
+    show($('cf-msg'),'Thank you! Your comment will appear once it has been reviewed.');
+  } catch(err){ console.error(err); show($('cf-msg'),'Sorry, something went wrong. Please try again.'); }
+};
+
+/* ── SUBSCRIBE ── */
+window.handleSubscribe = async e => {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db,'private_contacts'),{email:$('sub-email').value.trim(),type:'subscriber',createdAt:serverTimestamp()});
+    $('sub-form').style.display='none'; $('sub-success').style.display='block';
+  } catch(err){ console.error(err); alert('Sorry, subscription failed. Please try again.'); }
+};
+
+/* ── SUGGEST A RESOURCE ── */
+window.openSuggest = () => { $('suggest-modal').style.display='flex'; };
+window.closeSuggest = () => { $('suggest-modal').style.display='none'; };
+$('suggest-modal').addEventListener('click', e => { if (e.target.id==='suggest-modal') closeSuggest(); });
+
+window.submitSuggest = async e => {
+  e.preventDefault();
+  if ($('sg-hp').value) return;                       // honeypot: bots fill this
+  const last = +store.get('lchr_sg_t')||0;
+  if (Date.now()-last < 60000) return show($('sg-msg'),'Please wait a minute before submitting another.');
+  try {
+    await addDoc(collection(db,'suggestions'),{
+      name:$('sg-name').value.trim(), category:$('sg-cat').value, city:$('sg-city').value.trim(),
+      phone:$('sg-phone').value.trim(), website:$('sg-web').value.trim(), notes:$('sg-notes').value.trim(),
+      email:$('sg-email').value.trim(), status:'pending', createdAt:serverTimestamp()
+    });
+    store.set('lchr_sg_t')(String(Date.now()));
+    e.target.reset();
+    show($('sg-msg'),'Thank you! We review suggestions within 7 days.');
+  } catch(err){ console.error(err); show($('sg-msg'),'Sorry, something went wrong. Please try again.'); }
+};
+</script>
+
 </body>
 </html>
